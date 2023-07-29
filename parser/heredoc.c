@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:30:36 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 19:37:44 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,7 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 
-//Parse delimiter
-static char	*heredoc_parse_delimiter(char const *delim)
-{
-	char*const	new_delim = unquote_env(delim);
-
-	return (new_delim);
-}
-
+//heredoc에 사용 될 tmp파일의 이름
 static char	*heredoc_filename(int idx)
 {
 	char*const	name = allocate(8);
@@ -37,11 +30,12 @@ static char	*heredoc_filename(int idx)
 	return (name);
 }
 
+//heredoc 
 static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 {
 	char*const	name = heredoc_filename(idx);
 	int const	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	char*const	parsed_delim = heredoc_parse_delimiter(delim->content);
+	char*const	parsed_delim = unquote(delim->content);
 	char		*str;
 
 	if (fd == -1)

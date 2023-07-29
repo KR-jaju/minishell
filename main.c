@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 19:27:50 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 19:39:13 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <parser/heredoc.h>
 #include <shell/minishell.h>
 #include <pipe/pipe.h>
+#include <parser/compiler.h>
 
 void	visualize(t_list tokens)
 {
@@ -61,16 +62,8 @@ int	main(int argc, char **argv, char **envp)
 	(void) envp;
 	char	*str;
 	t_list	tokens;
-	int		i;
 
 	minishell_init(envp);
-	i = 0;
-	while (i < g_minishell.env_list.length)
-	{
-		t_envp *pair = list_get(&g_minishell.env_list, i);
-		printf("pair->name %s , pair.value : %s\n", pair->name, pair->value);
-		i++;
-	}
 	while (1)
 	{
 		str = readline("minishell$ ");
@@ -81,7 +74,11 @@ int	main(int argc, char **argv, char **envp)
 		add_history(str);
 		tokens = tokenize_command(str);
 		heredoc_substitute(&tokens);
-		pipe_start(&tokens);
+		t_list p_test = compile(&tokens);
+		t_process *p = list_get(&p_test, 0);
+		printf("%s", p->name);
+		exit(0);
+		//pipe_start(&tokens);
 		//visualize(tokens);
 		heredoc_unlink_tmp();
 		free(str);
