@@ -6,12 +6,12 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:18:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 16:27:31 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "str.h"
-#include "libft.h"
+#include "libft/libft.h"
 #include <stdlib.h>
 
 int	str_length(char const *str)
@@ -138,7 +138,10 @@ int	str_indexof(char *str, char c)
 
 	i = 0;
 	while (str[i] != '\0')
+	{
 		if (str[i] == c)
 			return (i);
+		i++;
+	}
 	return (-1);
 }

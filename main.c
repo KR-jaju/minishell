@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 19:35:45 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 12:50:42 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "tokenizer.h"
 #include "syntax.h"
 #include "heredoc.h"
+#include "minishell.h"
 
 void	visualize(t_list tokens)
 {
@@ -59,7 +60,16 @@ int	main(int argc, char **argv, char **envp)
 	(void) envp;
 	char	*str;
 	t_list	tokens;
+	int		i;
 
+	minishell_init(envp);
+	i = 0;
+	while (i < g_minishell.env_list.length)
+	{
+		t_envp *pair = list_get(&g_minishell.env_list, i);
+		printf("pair->key %s , pair.name : %s\n", pair->key, pair->name);
+		i++;
+	}
 	while (1)
 	{
 		str = readline("minishell$ ");

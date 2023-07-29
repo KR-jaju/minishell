@@ -6,12 +6,12 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 18:43:42 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "heredoc.h"
-#include "libft.h"
+#include "libft/libft.h"
 #include "parser.h"
 
 //Parse delimiter

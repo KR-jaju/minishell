@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 18:29:54 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 12:47:39 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_minishell
 
 t_minishell	g_minishell;
 
+void	minishell_init(char **envp);
 char const	*get_envp(char const *str);
 
 #endif

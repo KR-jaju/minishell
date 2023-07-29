@@ -6,12 +6,12 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 19:16:09 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
-#include "libft.h"
+#include "libft/libft.h"
 #include "str.h"
 #include <stdlib.h>
 

@@ -6,14 +6,14 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 23:34:21 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 17:37:41 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "libft.h"
+# include "libft/libft.h"
 # include "str.h"
 
 char	*unquote(char const *str);
