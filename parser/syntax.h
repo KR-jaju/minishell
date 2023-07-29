@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 12:37:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:34:31 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 18:55:11 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <collection/list.h>
 # include "tokenizer.h"
 
+//
 int	syntax_check(t_list	*tokens);
 
 #endif
