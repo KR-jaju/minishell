@@ -6,12 +6,12 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:59:14 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/25 04:43:37 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "list.h"
-#include "libft.h"
+#include "libft/libft.h"
 #include <stdlib.h>
 
 typedef unsigned int	t_byte;

@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 18:29:54 by jaju             ###   ########.fr       */
+/*   Created: 2023/07/26 23:34:21 by jaju              #+#    #+#             */
+/*   Updated: 2023/07/29 13:37:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef PARSER_H
+# define PARSER_H
 
-# include "list.h"
+# include <libft/libft.h>
+# include <str/str.h>
 
-typedef struct s_envp
-{
-	char	*key;
-	char	*name;
-}t_envp;
-
-typedef struct s_minishell
-{
-	t_list	env_list;
-	int		exit_code;
-}t_minishell;
-
-t_minishell	g_minishell;
-
-char const	*get_envp(char const *str);
+char	*unquote(char const *str);
+char	*unquote_env(char const *str);
 
 #endif

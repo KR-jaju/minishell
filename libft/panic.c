@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   panic.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/26 23:34:21 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 17:37:41 by jaju             ###   ########.fr       */
+/*   Created: 2023/07/28 17:20:47 by jaju              #+#    #+#             */
+/*   Updated: 2023/07/29 13:17:35 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "libft.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-# include "libft.h"
-# include "str.h"
-
-char	*unquote(char const *str);
-char	*unquote_env(char const *str);
-
-#endif
+void	panic(char *msg)
+{
+	printf("%s", msg);
+	exit(1);
+}

@@ -1,5 +1,10 @@
 NAME := minishell
-SRCS := main.c str.c tokenizer.c allocate.c list.c syntax.c heredoc.c copy.c parser.c is_number.c is_alphabet.c
+SRCS :=	main.c\
+		shell/minishell.c\
+		parser/heredoc.c parser/tokenizer.c parser/syntax.c parser/parser.c\
+		libft/allocate.c libft/copy.c libft/is_number.c libft/is_alphabet.c\
+		str/str.c\
+		collection/list.c
 OBJS := $(SRCS:%.c=%.o)
 ARCS := 
 LIBS := $(dir $(ARCS))

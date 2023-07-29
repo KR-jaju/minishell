@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process.c                                          :+:      :+:    :+:   */
+/*   syntax.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 17:20:21 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/25 19:03:40 by jaju             ###   ########.fr       */
+/*   Created: 2023/07/25 12:37:44 by jaju              #+#    #+#             */
+/*   Updated: 2023/07/29 13:34:31 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#ifndef SYNTAX_H
+# define SYNTAX_H
 
-int	process_create(void (*func)(void *), int fd_in, int fd_out)
-{
-	int const	pid = fork();
+# include <collection/list.h>
+# include "tokenizer.h"
 
-	if (pid == -1)
-		exit(1); // ERROR
-	if (pid > 0)
-		return (pid);
-	func(0);
-	exit(0);
-}
+int	syntax_check(t_list	*tokens);
+
+#endif
