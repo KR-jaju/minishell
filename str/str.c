@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:18:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 17:38:14 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 18:54:22 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*str_tokenize(char *str, char const *delim)
 	while (*saved != '\0' && !str_includes (delim, *saved))
 		saved++;
 	if (*saved == '\0')
-		return (saved = (void *)0, (void *)0);
+		saved = (void *)0;
 	else
 		*(saved++) = '\0';
 	return (tmp);
