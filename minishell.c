@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:57:55 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:16:24 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:24:38 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 void	pair_init(t_envp *envp)
 {
-	envp->key = NULL;
 	envp->name = NULL;
+	envp->value = NULL;
 }
 
 // 환경변수들 = 기준으로 다 넣어주기
@@ -38,15 +38,15 @@ void	minishell_init(char **envp)
 	{
 		pair = allocate(sizeof(t_envp));
 		index = str_indexof(envp[i], '=');
-		pair->key = str_substr(envp[i], 0, index);
-		pair->name = str_substr(envp[i], index + 1, str_length(envp[i]));
+		pair->name = str_substr(envp[i], 0, index);
+		pair->value = str_substr(envp[i], index + 1, str_length(envp[i]));
 		list_add(&env, pair);
 		i++;
 	}
 	g_minishell.env_list = env;
 }
 
-char const	*get_envp(char const *str)
+char const	*get_env(char const *str)
 {
 	t_list*const	env_list = &g_minishell.env_list;
 	t_envp			*env;
@@ -56,8 +56,8 @@ char const	*get_envp(char const *str)
 	while (i < env_list->length)
 	{
 		env = list_get(env_list, i);
-		if (str_equals(str, env->key))
-			return (env->name);
+		if (str_equals(str, env->name))
+			return (env->value);
 		i++;
 	}
 	return ("");

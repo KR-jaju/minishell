@@ -6,14 +6,14 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:31:39 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 20:15:54 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:28:52 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-# include "list.h"
+# include <list.h>
 
 typedef enum e_token_type
 {

@@ -6,13 +6,18 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:30:36 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "heredoc.h"
-#include "libft/libft.h"
-#include "parser.h"
+#include <libft/libft.h>
+#include <parser/parser.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <stdlib.h>
 
 //Parse delimiter
 static char	*heredoc_parse_delimiter(char const *delim)

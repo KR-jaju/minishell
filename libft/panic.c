@@ -6,12 +6,13 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 17:20:47 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:17:35 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
+#include "libft.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void	panic(char *msg)
 {
