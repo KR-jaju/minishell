@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.h                                             :+:      :+:    :+:   */
+/*   compiler.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/24 20:21:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 17:27:54 by jaju             ###   ########.fr       */
+/*   Created: 2023/07/29 15:48:33 by jaju              #+#    #+#             */
+/*   Updated: 2023/07/29 17:40:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIST_H
-# define LIST_H
+#ifndef COMPILER_H
+# define COMPILER_H
 
-typedef struct s_list{
-	void	**data;
-	int		length;
-	int		capacity;
-}t_list;
+# include <collection/list.h>
 
-void	list_init(t_list *this);
-void	list_add(t_list *this, void *element);
-void	*list_get(t_list const *this, int i);
+// 파이프라인으로 구분되는 실행의 단위
+typedef struct s_process
+{
+	char	*name;
+	char	**argv;
+	int		out_fd;
+	int		append;
+	int		in_fd;
+	int		bad_process;
+}t_process;
+
+//파이프라인 (|) 단위로 프로세스를 만들어 리스트에 넣고 리턴
+t_list	compile(t_list const *tokens);
 
 
 #endif
