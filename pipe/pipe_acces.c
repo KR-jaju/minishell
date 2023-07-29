@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/29 23:19:57 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 04:12:42 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 #include "../str/str.h"
 #include "../parser/compiler.h"
 
-
 void	echo_main(t_process *this);
+int 	pwd_main(t_process *this);
+void	cd_main(t_process *this);
+void	execute(t_process	*tmp);
 
 char	const *check_acces(char *envp, char *cmd)
 {
@@ -100,10 +102,10 @@ void	execute_builtins(int check_builtins, t_process *tmp)
 {
 	if (check_builtins == ECHO)
 		echo_main(tmp);
-	// else if (check_builtins == CD)
-	// 	execute_CD();
-	// else if (check_builtins == PWD)
-	// 	execute_PWD();
+	else if (check_builtins == CD)
+		cd_main(tmp);
+	else if (check_builtins == PWD)
+		pwd_main(tmp);
 	// else if (check_builtins == EXPORT)
 	// 	execute_EXPORT();
 	// else if (check_builtins == UNSET)
@@ -114,13 +116,22 @@ void	execute_builtins(int check_builtins, t_process *tmp)
 	// 	execute_EXIT();
 }
 
+void	execute(t_process	*tmp)
+{
+	char const	*path_envp = get_env("PATH");
+	char const	*path_split;
+
+	path_split = envp_split(path_envp, tmp->name);
+	//printf("path_split : %s\n", path_split);
+	execve(path_split, tmp->argv, get_envp());
+	
+}
+
 
 void	pipe_acces(t_list *p_test)
 {
 	t_process	*tmp;
-	char const	*path_split;
 	int			i;
-	char const	*path_envp = get_env("PATH");
 	int			check_builtins;
 
 	i = 0;
@@ -132,7 +143,8 @@ void	pipe_acces(t_list *p_test)
 			execute_builtins(check_builtins, tmp);
 		else
 		{
-			path_split = envp_split(path_envp, tmp->name);
+			execute(tmp);
+
 		}
 		i++;
 	}

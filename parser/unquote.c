@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quote.c                                            :+:      :+:    :+:   */
+/*   unquote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:35:20 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 01:24:54 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ static void	str_add_env(char **new, char const **str)
 }
 
 //$?의 결과를 문자열 new에 붙임
-void	str_add_exit_code(char **new)
+void	str_add_exit_code(char **new, char const **str)
 {
 	int const	exit_code = g_minishell.exit_code;
 
+	(*str)++;
 	if (exit_code / 100 % 10 != 0)
 	{
 		str_add_char(new, (exit_code / 100 % 10) + '0');
@@ -89,7 +90,7 @@ void	str_add_dq(char **new, char const **str)
 	if (**str == '$' && (is_alphabet((*str)[1]) || (*str)[1] == '_'))
 		str_add_env(new, str);
 	else if (**str == '$' && (*str)[1] == '?')
-		str_add_exit_code(new);
+		str_add_exit_code(new, str);
 	else
 		str_add_char(new, **str);
 }

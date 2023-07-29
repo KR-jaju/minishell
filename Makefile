@@ -6,7 +6,7 @@ SRCS :=	main.c\
 		str/str.c\
 		collection/list.c\
 		pipe/pipe_acces.c\
-		launcher/builtin/echo.c
+		launcher/builtin/echo.c launcher/builtin/cd.c launcher/builtin/pwd.c
 
 OBJS := $(SRCS:%.c=%.o)
 ARCS := 

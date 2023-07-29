@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 23:20:30 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 02:03:59 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ int	main(int argc, char **argv, char **envp)
 		heredoc_substitute(&tokens);
 		//t_list p_test = compile(&tokens);
 		//exit(0);
-		pipe_start(&tokens);
 		//visualize(tokens);
+		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
 	}
