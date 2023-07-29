@@ -4,7 +4,8 @@ SRCS :=	main.c\
 		parser/heredoc.c parser/tokenizer.c parser/syntax.c parser/compiler.c parser/quote.c parser/process.c\
 		libft/allocate.c libft/copy.c libft/is_number.c libft/is_alphabet.c\
 		str/str.c\
-		collection/list.c
+		collection/list.c\
+		pipe/pipe_acces.c
 OBJS := $(SRCS:%.c=%.o)
 ARCS := 
 LIBS := $(dir $(ARCS))
