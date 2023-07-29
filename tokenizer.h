@@ -1,22 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/23 18:22:34 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 17:28:47 by jaju             ###   ########.fr       */
+/*   Created: 2023/07/24 20:31:39 by jaju              #+#    #+#             */
+/*   Updated: 2023/07/28 20:15:54 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#ifndef TOKENIZER_H
+# define TOKENIZER_H
 
-void	*allocate(int size);
-void	copy(void *src, void *dst, int size);
-int		is_alphabet(char c);
-int		is_number(char c);
-void	panic(char *msg);
+# include "list.h"
+
+typedef enum e_token_type
+{
+	VOID,
+	TK_STR,
+	TK_IRD,
+	TK_ORD,
+	TK_HRD,
+	TK_ARD,
+	TK_PIPE,
+	TK_INVALID,
+	TK_EXPANDED_STR,
+	TK_QUOTED_STR
+}t_token_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*content;
+}t_token;
+
+t_list	tokenize_command(char *str);
 
 #endif
