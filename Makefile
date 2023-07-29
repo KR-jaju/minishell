@@ -1,12 +1,12 @@
 NAME := minishell
 SRCS :=	main.c\
-		shell/minishell.c\
+		shell/minishell.c shell/env.c shell/env_util.c\
 		parser/heredoc.c parser/tokenizer.c parser/syntax.c parser/compiler.c parser/unquote.c parser/process.c\
 		libft/allocate.c libft/copy.c libft/is_number.c libft/is_alphabet.c\
 		str/str.c\
 		collection/list.c\
 		pipe/pipe_acces.c\
-		launcher/builtin/echo.c launcher/builtin/cd.c launcher/builtin/pwd.c
+		launcher/builtin/echo.c launcher/builtin/pwd.c launcher/builtin/exit.c launcher/builtin/cd.c
 
 OBJS := $(SRCS:%.c=%.o)
 ARCS := 
