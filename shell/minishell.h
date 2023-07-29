@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 18:58:17 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 19:23:56 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_minishell
 	int		exit_code;
 }t_minishell;
 
+//
 t_minishell	g_minishell;
 
 //미니쉘(전역변수) 초기화

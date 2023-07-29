@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:40:57 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 19:27:50 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <parser/syntax.h>
 #include <parser/heredoc.h>
 #include <shell/minishell.h>
+#include <pipe/pipe.h>
 
 void	visualize(t_list tokens)
 {
@@ -80,8 +81,8 @@ int	main(int argc, char **argv, char **envp)
 		add_history(str);
 		tokens = tokenize_command(str);
 		heredoc_substitute(&tokens);
-		
-		visualize(tokens);
+		pipe_start(&tokens);
+		//visualize(tokens);
 		heredoc_unlink_tmp();
 		free(str);
 	}
