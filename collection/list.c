@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:59:14 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 17:27:40 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 21:24:57 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,22 @@ void	*list_get(t_list const *this, int i)
 	if (i < 0 || i >= this->length)
 		return ((void *)0);
 	return (this->data[i]);
+}
+
+void	list_free(t_list *this)
+{
+	free(this->data);
+}
+
+void	list_free_all(t_list *this)
+{
+	int	i;
+
+	i = 0;
+	while (i < this->length)
+	{
+		free(this->data[i]);
+		i++;
+	}
+	free(this->data);
 }

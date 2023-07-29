@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 15:47:45 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 20:35:20 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <shell/minishell.h>
 
+//문자열 str에 문자 c를 붙임
 static void	str_add_char(char **str, char c)
 {
 	int const	length = str_length(*str);
@@ -31,6 +32,7 @@ static void	str_add_char(char **str, char c)
 	(*str)[length] = c;
 }
 
+//문자열 str에 문자열 a를 붙임
 static void	str_add(char **str, char const *a)
 {
 	int	i;
@@ -43,6 +45,7 @@ static void	str_add(char **str, char const *a)
 	}
 }
 
+//문자열 new에 주어진 문자열 str을 환경변수로 치환해 붙임
 static void	str_add_env(char **new, char const **str)
 {
 	char	*substr;
@@ -56,11 +59,11 @@ static void	str_add_env(char **new, char const **str)
 	substr = str_substr(*str, 0, i);
 	env = get_env(substr);
 	str_add(new, env);
-	printf("unquote: %s", env);
 	free(substr);
 	*str += i - 1;
 }
 
+//$?의 결과를 문자열 new에 붙임
 void	str_add_exit_code(char **new)
 {
 	int const	exit_code = g_minishell.exit_code;
@@ -80,6 +83,7 @@ void	str_add_exit_code(char **new)
 		str_add_char(new, (exit_code % 10) + '0');
 }
 
+//큰 따옴표(dq)의 특성대로 문자열 new에 붙임
 void	str_add_dq(char **new, char const **str)
 {
 	if (**str == '$' && (is_alphabet((*str)[1]) || (*str)[1] == '_'))
@@ -90,6 +94,7 @@ void	str_add_dq(char **new, char const **str)
 		str_add_char(new, **str);
 }
 
+//작은 따옴표 ('')를 제외한 부분에서 환경변수 치환
 char	*unquote_env(char const *str)
 {
 	char	*new;
@@ -110,6 +115,7 @@ char	*unquote_env(char const *str)
 	return (new);
 }
 
+//환경변수 치환 없이 따옴표 제거
 char	*unquote(char const *str)
 {
 	char*const	new = allocate(str_length(str) + 1);

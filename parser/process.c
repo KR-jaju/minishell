@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 19:42:02 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 22:14:48 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ int		set_output(t_process *process, char *filename, int append);
 //프로세스의 입력을 설정, 실패 시 0 리턴, 성공 시 1 리턴
 int		set_input(t_process *process, char *filename);
 
+//프로세스 구조체 초기화
 void	process_init(t_process *process)
 {
 	process->bad_process = 0;
 	process->in_fd = 0;
 	process->out_fd = 1;
 	process->name = (void *)0;
+	process->argc = 0;
 	process->argv = allocate(1 * sizeof(char *));
 }
 
@@ -63,6 +65,7 @@ void	add_arg(t_process *process, char const *arg)
 		free(process->argv);
 		process->argv = tmp;
 	}
+	process->argc++;
 	process->argv[length] = str_clone(arg);
 }
 

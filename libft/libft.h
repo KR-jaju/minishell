@@ -6,14 +6,14 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 18:22:34 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/28 20:30:58 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 20:29:08 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-//malloc, 실패 시 exit
+//malloc + 모든 바이트 0으로 초기화. 실패 시 exit
 void	*allocate(int size);
 //memcpy, src에서 dst로 size 바이트만큼 복사
 void	copy(void *src, void *dst, int size);

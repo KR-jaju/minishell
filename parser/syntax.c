@@ -6,12 +6,13 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 12:38:51 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/25 14:53:17 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 22:10:11 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "syntax.h"
 
+//맨 앞과 맨 뒤에 있는 토큰이 그 자리에 있어도 되는가?
 static int	first_last_check(t_list *tokens)
 {
 	t_token*const	first = list_get(tokens, 0);
@@ -28,6 +29,7 @@ static int	first_last_check(t_list *tokens)
 	return (invalid);
 }
 
+//연속적으로 오는 두 개의 토큰이 존재할 수 있는 조합인가?
 static int	successive_token_check(t_list *tokens)
 {
 	t_token	*curr;
@@ -51,6 +53,7 @@ static int	successive_token_check(t_list *tokens)
 	return (0);
 }
 
+//토큰 리스트 단위 문법 체크
 int	syntax_check(t_list *tokens)
 {
 	return (

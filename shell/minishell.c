@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:57:55 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:37:25 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 20:37:14 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,7 @@
 #include <stdio.h>
 #include "libft/libft.h"
 
-
-void	pair_init(t_envp *envp)
-{
-	envp->name = NULL;
-	envp->value = NULL;
-}
-
-// 환경변수들 = 기준으로 다 넣어주기
+//미니쉘(전역변수) 초기화
 void	minishell_init(char **envp)
 {
 	t_envp	*pair;
@@ -32,7 +25,6 @@ void	minishell_init(char **envp)
 	int		index;
 
 	list_init(&env);
-	//환경변수 key, value에 값 넣어주기
 	i = 0;
 	while (envp[i] != (void *)0)
 	{
@@ -46,6 +38,7 @@ void	minishell_init(char **envp)
 	g_minishell.env_list = env;
 }
 
+//문자열에 대응하는 환경변수의 값을 리턴
 char const	*get_env(char const *str)
 {
 	t_list*const	env_list = &g_minishell.env_list;

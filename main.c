@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 19:39:13 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 20:40:36 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ int	main(int argc, char **argv, char **envp)
 		tokens = tokenize_command(str);
 		heredoc_substitute(&tokens);
 		t_list p_test = compile(&tokens);
-		t_process *p = list_get(&p_test, 0);
-		printf("%s", p->name);
 		exit(0);
 		//pipe_start(&tokens);
 		//visualize(tokens);

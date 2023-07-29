@@ -29,7 +29,7 @@ int		str_equals(char const *a, char const *b);
 char	*str_join(char const *a, char const *b);
 //str에서 c가 몇 번째 인덱스에 있는지 리턴, 없으면 -1
 int		str_indexof(char *str, char c);
-//str을 복사하는 함수
+//str을 복제하는 함수
 char	*str_clone(char const *str);
 
 #endif

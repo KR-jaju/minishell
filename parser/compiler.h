@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:48:33 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 18:55:44 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 22:14:21 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 typedef struct s_process
 {
 	char	*name;
+	int		argc;
 	char	**argv;
 	int		out_fd;
 	int		append;
@@ -28,6 +29,5 @@ typedef struct s_process
 
 //파이프라인 (|) 단위로 프로세스를 만들어 리스트에 넣고 리턴
 t_list	compile(t_list const *tokens);
-
 
 #endif
