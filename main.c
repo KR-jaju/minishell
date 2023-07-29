@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:40:36 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 23:20:30 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	main(int argc, char **argv, char **envp)
 		add_history(str);
 		tokens = tokenize_command(str);
 		heredoc_substitute(&tokens);
-		t_list p_test = compile(&tokens);
-		exit(0);
-		//pipe_start(&tokens);
+		//t_list p_test = compile(&tokens);
+		//exit(0);
+		pipe_start(&tokens);
 		//visualize(tokens);
 		heredoc_unlink_tmp();
 		free(str);

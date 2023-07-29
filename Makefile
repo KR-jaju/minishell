@@ -5,7 +5,9 @@ SRCS :=	main.c\
 		libft/allocate.c libft/copy.c libft/is_number.c libft/is_alphabet.c\
 		str/str.c\
 		collection/list.c\
-		pipe/pipe_acces.c
+		pipe/pipe_acces.c\
+		launcher/builtin/echo.c
+
 OBJS := $(SRCS:%.c=%.o)
 ARCS := 
 LIBS := $(dir $(ARCS))
