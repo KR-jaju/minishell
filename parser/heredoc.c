@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 19:37:44 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 20:31:09 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 
-//heredoc에 사용 될 tmp파일의 이름
+//heredoc에 사용할 tmp파일의 이름
 static char	*heredoc_filename(int idx)
 {
 	char*const	name = allocate(8);
@@ -30,7 +30,7 @@ static char	*heredoc_filename(int idx)
 	return (name);
 }
 
-//heredoc 
+//heredoc 입력을 받기 위한 프롬프트 열기
 static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 {
 	char*const	name = heredoc_filename(idx);
@@ -57,6 +57,7 @@ static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 	close(fd);
 }
 
+//heredoc 임시파일 삭제
 void	heredoc_unlink_tmp(void)
 {
 	int		i;
@@ -72,6 +73,7 @@ void	heredoc_unlink_tmp(void)
 	}
 }
 
+//<<를 <로 치환, delimiter를 tmp파일로 치환
 void	heredoc_substitute(t_list *tokens)
 {
 	t_token	*token;

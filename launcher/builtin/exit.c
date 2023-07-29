@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.h                                          :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 13:56:33 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:31:12 by jaju             ###   ########.fr       */
+/*   Created: 2023/07/29 21:54:31 by jaju              #+#    #+#             */
+/*   Updated: 2023/07/29 22:24:35 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEREDOC_H
-# define HEREDOC_H
+#include <parser/compiler.h>
+#include <libft/libft.h>
+#include <stdlib.h>
 
-# include "collection/list.h"
-# include <parser/tokenizer.h>//없어도 될 수 있음
+#define STDIN 0
+#define STDOUT 1
 
-//<<를 <로 치환, delimiter를 tmp파일로 치환.
-void	heredoc_substitute(t_list *tokens);
-//heredoc 임시파일 삭제
-void	heredoc_unlink_tmp(void);
-
-#endif
+int	exit_main(t_process *this)
+{
+	if (this->argc != 1)
+		panic("exit: too many arguments");
+	exit(0);
+}

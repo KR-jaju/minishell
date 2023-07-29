@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:22:54 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/29 17:28:06 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/29 21:11:34 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 typedef struct s_pro_join
 {
-	char	*envp_join;
+	char		*envp_join;
 }t_pro_join;
 
 void	pipe_start(t_list *tokens);

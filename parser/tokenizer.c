@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:37:25 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 20:46:55 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <str/str.h>
 #include <stdlib.h>
 
+//리다이렉션, 파이프라인과 같은 기호를 토큰으로 만듦
 static t_token	tokenize_symbol(char **str)
 {
 	t_token	token;
@@ -44,6 +45,7 @@ static t_token	tokenize_symbol(char **str)
 	return (token.type = TK_INVALID, (*str)++, token);
 }
 
+//기호가 아닌 나머지를 토큰으로 만듦
 static t_token	tokenize_non_symbol(char **str)
 {
 	char		*start;
@@ -67,7 +69,7 @@ static t_token	tokenize_non_symbol(char **str)
 	return (token);
 }
 
-// | < << > >> whitespace
+// | < << > >> whitespace를 기준으로 토큰을 나눔
 t_token	*tokenize(char *s)
 {
 	static char	*str;
@@ -87,6 +89,7 @@ t_token	*tokenize(char *s)
 	return (token);
 }
 
+//주어진 문자열을 토큰 리스트로 만들어 리턴함
 t_list	tokenize_command(char *str)
 {
 	t_list	list;
