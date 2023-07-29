@@ -6,15 +6,15 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 00:32:58 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:28:06 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:38:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include <list.h>
+#include <collection/list.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <minishell.h>
+#include <shell/minishell.h>
 
 static void	str_add_char(char **str, char c)
 {

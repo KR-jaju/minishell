@@ -6,12 +6,12 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:57:55 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:24:38 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:37:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "str.h"
+#include "str/str.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "libft/libft.h"
