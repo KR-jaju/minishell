@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:59:14 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:15:27 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 17:27:40 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	list_add(t_list *this, void *element)
 	this->data[this->length++] = element;
 }
 
-void	*list_get(t_list *this, int i)
+void	*list_get(t_list const *this, int i)
 {
 	if (i < 0 || i >= this->length)
 		return ((void *)0);

@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:18:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:37:38 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 17:38:14 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,4 +144,17 @@ int	str_indexof(char *str, char c)
 		i++;
 	}
 	return (-1);
+}
+
+char	*str_clone(char const *str)
+{
+	char*const	new = allocate((str_length(str) + 1) * sizeof(char));
+	char		*ptr;
+
+	if (str == (void *)0)
+		return (free(new), (void *)0);
+	ptr = new;
+	while (*str != '\0')
+		*(ptr++) = *(str++);
+	return (new);
 }
