@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 13:37:28 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/29 13:40:57 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <collection/list.h>
 #include <parser/tokenizer.h>
 #include <parser/syntax.h>
-#include <shell/heredoc.h>
+#include <parser/heredoc.h>
 #include <shell/minishell.h>
 
 void	visualize(t_list tokens)

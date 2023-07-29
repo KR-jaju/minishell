@@ -1,7 +1,7 @@
 NAME := minishell
 SRCS :=	main.c\
-		shell/heredoc.c shell/minishell.c\
-		parser/tokenizer.c parser/syntax.c parser/parser.c\
+		shell/minishell.c\
+		parser/heredoc.c parser/tokenizer.c parser/syntax.c parser/parser.c\
 		libft/allocate.c libft/copy.c libft/is_number.c libft/is_alphabet.c\
 		str/str.c\
 		collection/list.c
