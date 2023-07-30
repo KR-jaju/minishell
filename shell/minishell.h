@@ -6,11 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/07/30 03:40:13 by jaeyojun         ###   ########seoul.kr  */
-=======
-/*   Updated: 2023/07/30 04:07:57 by jaju             ###   ########.fr       */
->>>>>>> 120aa7346576ca5eae4fc49cc323ba15ee429734
+/*   Updated: 2023/07/30 04:25:17 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +36,11 @@ t_minishell	g_minishell;
 void		minishell_init(char **envp);
 //문자열에 대응하는 환경변수의 값을 리턴
 char const	*get_env(char const *str);
-<<<<<<< HEAD
-=======
 //문자열에 대응하는 환경변수의 값을 설정
 void		set_env(char const *name, char const *value);
 //환경변수 삭제 (실패하면 아무 일도 일어나지 않음)
 void		remove_env(char const *name);
 //리스트로 들고 있던 envp를 char **로 만들어 리턴
->>>>>>> 120aa7346576ca5eae4fc49cc323ba15ee429734
 char		**get_envp(void);
 
 #endif

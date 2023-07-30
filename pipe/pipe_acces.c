@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 04:12:42 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 04:35:54 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,11 @@ void	execute(t_process	*tmp)
 
 	path_split = envp_split(path_envp, tmp->name);
 	//printf("path_split : %s\n", path_split);
-	execve(path_split, tmp->argv, get_envp());
-	
+	printf("tmp -> outfd : %d\n", tmp->out_fd);
+	printf("tmp -> outfd : %d\n", tmp->in_fd);
+	printf("tmp -> outfd : %d", tmp->bad_process);
+	//execve(path_split, tmp->argv, get_envp());
+
 }
 
 
