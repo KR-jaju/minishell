@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:46:55 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 09:58:44 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_token	tokenize_symbol(char **str)
 {
 	t_token	token;
 
-	token.type = VOID;
+	token.type = TK_INVALID;
 	token.content = (void *)0;
 	if ((*str)[0] == '<')
 	{
