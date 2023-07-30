@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:51:48 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 09:55:42 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 13:44:41 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,29 @@ static t_process	*parse_process( t_process *process, t_list const *tokens,
 {
 	t_token			*token;
 
+	token = list_get(tokens, *i);
 	while (*i < tokens->length && (token->type != TK_PIPE || *i == tokens->length))
 	{
-		token = list_get(tokens, *i);
 		if (token->type == TK_STR && process->name == (void *)0)
 			set_name(process, token->content);
 		else if (token->type == TK_STR)
 			add_arg(process, token->content);
-		else if (token->type == TK_ORD
-			&& !set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, FALSE))
-			break ;
-		else if (token->type == TK_ARD
-			&& !set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, TRUE))
-			break ;
+		else if (token->type == TK_ORD)
+		{
+			if (!set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, FALSE))
+				break ;
+		}
+		else if (token->type == TK_ARD)
+		{
+			if (!set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, TRUE))
+				break ;
+		}
 		else if (token->type == TK_IRD)
+		{
 			if (!set_input(process, ((t_token *)list_get(tokens, ++(*i)))->content))
 				break ;
-		(*i)++;
+		}
+		token = list_get(tokens, ++(*i));
 	}
 	return (process);
 }
