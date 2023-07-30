@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 03:49:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 04:10:26 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 11:52:48 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include <libft/libft.h>
 #include <stdlib.h>
 
-//주어진 이름의 환경변수 (키: 값)쌍을 찾음, 내부적으로만 사용
-t_envp	*find_env(char const *name);
 //envp구조체를 char *로 만들어 줌
 char	*env_to_str(t_envp *env);
 
@@ -41,17 +39,24 @@ char const	*get_env(char const *str)
 void	set_env(char const *name, char const *value)
 {
 	t_list*const	env_list = &g_minishell.env_list;
+	int				i;
 	t_envp			*env;
 
-	env = find_env(name);
-	if (env != (void *)0)
-		free(env->value);
-	else
+	i = 0;
+	while (i < env_list->length)
 	{
-		env = allocate(sizeof(t_envp));
-		env->name = str_clone(name);
-		list_add(env_list, env);
+		env = list_get(env_list, i++);
+		if (str_equals(env->name, name))
+		{
+			if (value == (void *)0)
+				return ;
+			else
+				return (free(env->value), env->value = str_clone(value), (void)0);
+		}
 	}
+	env = allocate(sizeof(t_envp));
+	list_add(env_list, env);
+	env->name = str_clone(value);
 	env->value = str_clone(value);
 }
 

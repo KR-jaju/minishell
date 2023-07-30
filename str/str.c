@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:18:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:40:01 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 12:02:13 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ char	*str_join(char const *a, char const *b)
 }
 
 //str에서 c가 몇 번째 인덱스에 있는지 리턴, 없으면 -1
-int	str_indexof(char *str, char c)
+int	str_indexof(char const *str, char c)
 {
 	int	i;
 
