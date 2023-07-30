@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 13:14:10 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 13:36:40 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,13 @@ void	execute_builtins(int check_builtins, t_process *tmp)
 	// 	execute_EXIT();
 }
 
+
+// void	pipe_execute(t_process *tmp, char const *path_split)
+// {
+// 	//printf("tmp->argc : %d\n", tmp->argc);
+// 	//printf("%s\n", path_split);
+// }
+
 void	execute(t_process	*tmp)
 {
 	char const	*path_envp = get_env("PATH");
@@ -124,10 +131,11 @@ void	execute(t_process	*tmp)
 
 	path_split = envp_split(path_envp, tmp->name);
 	//printf("path_split : %s\n", path_split);
-	printf("tmp -> outfd : %d\n", tmp->out_fd);
-	printf("tmp -> outfd : %d\n", tmp->in_fd);
-	printf("tmp -> outfd : %d", tmp->bad_process);
-	//execve(path_split, tmp->argv, get_envp());
+	// printf("tmp -> outfd : %d\n", tmp->out_fd);
+	// printf("tmp -> outfd : %d\n", tmp->in_fd);
+	// printf("tmp -> outfd : %d\n", tmp->bad_process);
+	//pipe_execute(tmp, path_split);
+	// execve(path_split, tmp->argv, get_envp());
 
 }
 
@@ -142,6 +150,7 @@ void	pipe_acces(t_list *p_test)
 	while (i < p_test->length)
 	{
 		tmp = list_get(p_test, i);
+		printf("tmp:name -> %s\n", tmp->name);
 		check_builtins = check_name_builtins(tmp->name);
 		if (check_builtins != -1)
 			execute_builtins(check_builtins, tmp);
