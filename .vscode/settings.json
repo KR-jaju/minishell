@@ -5,6 +5,7 @@
 		"list.h": "c",
 		"ostream": "c",
 		"unistd.h": "c",
-		"compiler.h": "c"
+		"compiler.h": "c",
+		"sstream": "c"
 	}
 }
