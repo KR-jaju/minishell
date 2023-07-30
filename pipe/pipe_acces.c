@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 04:35:54 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 13:14:10 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 void	echo_main(t_process *this);
 int 	pwd_main(t_process *this);
 void	cd_main(t_process *this);
+int		export_main(t_process *this);
 void	execute(t_process	*tmp);
 
 char	const *check_acces(char *envp, char *cmd)
@@ -106,8 +107,8 @@ void	execute_builtins(int check_builtins, t_process *tmp)
 		cd_main(tmp);
 	else if (check_builtins == PWD)
 		pwd_main(tmp);
-	// else if (check_builtins == EXPORT)
-	// 	execute_EXPORT();
+	 else if (check_builtins == EXPORT)
+	 	export_main(tmp);
 	// else if (check_builtins == UNSET)
 	// 	execute_UNSET();
 	// else if (check_builtins == ENV)

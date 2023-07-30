@@ -28,7 +28,7 @@ int		str_equals(char const *a, char const *b);
 //a와 b를 붙인 새로운 문자열을 생성
 char	*str_join(char const *a, char const *b);
 //str에서 c가 몇 번째 인덱스에 있는지 리턴, 없으면 -1
-int		str_indexof(char *str, char c);
+int		str_indexof(char const *str, char c);
 //str을 복제하는 함수
 char	*str_clone(char const *str);
 

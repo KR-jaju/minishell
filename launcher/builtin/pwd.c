@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:25:57 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 04:26:15 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 13:14:08 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft/libft.h>
 #include <str/str.h>
 
-int pwd_main(t_process *this)
+int	pwd_main(t_process *this)
 {
 	char	pwd[PATH_MAX];
 
