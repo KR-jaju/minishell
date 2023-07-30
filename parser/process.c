@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 04:35:32 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 13:24:42 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	set_name(t_process *process, char const *name);
 //프로세스의 옵션 추가
 void	add_arg(t_process *process, char const *arg);
 //프로세스의 출력 파일을 설정, 실패 시 0, 성공 시 1 리턴
-int		set_output(t_process *process, t_token *filename, int append);
+int		set_output(t_process *process, char *filename, int append);
 //프로세스의 입력을 설정, 실패 시 0 리턴, 성공 시 1 리턴
-int		set_input(t_process *process, t_token *filename);
+int		set_input(t_process *process, char *filename);
 
 //프로세스 구조체 초기화
 void	process_init(t_process *process)
@@ -71,13 +71,12 @@ void	add_arg(t_process *process, char const *arg)
 }
 
 //프로세스의 출력 파일을 설정, 실패 시 0, 성공 시 1 리턴
-int	set_output(t_process *process, t_token *filename, int append)
+int	set_output(t_process *process, char *filename, int append)
 {
 	if (process->out_fd != STD_OUT)
 		if (close(process->out_fd))
 			return (process->bad_process = 1, 0);
-	process->out_fd = open(filename->content, O_RDWR | O_WRONLY | \
-		O_CREAT, 0644);
+	process->out_fd = open(filename, O_WRONLY | O_CREAT, 0644);
 	process->append = append;
 	if (process->out_fd == -1)
 		return (process->bad_process = 1, 0);
@@ -85,12 +84,12 @@ int	set_output(t_process *process, t_token *filename, int append)
 }
 
 //프로세스의 입력을 설정, 실패 시 0 리턴, 성공 시 1 리턴
-int	set_input(t_process *process, t_token *filename)
+int	set_input(t_process *process, char *filename)
 {
 	if (process->in_fd != STD_IN)
 		if (close(process->in_fd))
 			return (process->bad_process = 1, 0);
-	process->in_fd = open(filename->content, O_RDONLY | O_CREAT, 0644);
+	process->in_fd = open(filename, O_RDONLY | O_CREAT, 0644);
 	if (process->in_fd == -1)
 		return (process->bad_process = 1, 0);
 	return (1);

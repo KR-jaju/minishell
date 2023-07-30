@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_acces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 13:14:10 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 16:42:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	echo_main(t_process *this);
 int 	pwd_main(t_process *this);
 void	cd_main(t_process *this);
 int		export_main(t_process *this);
-void	execute(t_process	*tmp);
+int		execute(t_process *process);
 
 char	const *check_acces(char *envp, char *cmd)
 {
@@ -75,7 +75,7 @@ char const	*envp_split(char const *envp_path, char *cmd)
 
 
 
-int	check_name_builtins(char *name)
+int	is_builtin(char *name, int *idx)
 {
 	char**const	builtins = (char *[]){
 		"echo",
@@ -92,22 +92,21 @@ int	check_name_builtins(char *name)
 	while (i < 7)
 	{
 		if (str_equals(name, builtins[i]) == 1)
-			return (i);
+			return (*idx = i, 1);
 		i++;
 	}
-	return (-1);
-
+	return (0);
 }
 
-void	execute_builtins(int check_builtins, t_process *tmp)
+void	execute_builtins(int builtin_idx, t_process *tmp)
 {
-	if (check_builtins == ECHO)
+	if (builtin_idx == ECHO)
 		echo_main(tmp);
-	else if (check_builtins == CD)
+	else if (builtin_idx == CD)
 		cd_main(tmp);
-	else if (check_builtins == PWD)
+	else if (builtin_idx == PWD)
 		pwd_main(tmp);
-	 else if (check_builtins == EXPORT)
+	 else if (builtin_idx == EXPORT)
 	 	export_main(tmp);
 	// else if (check_builtins == UNSET)
 	// 	execute_UNSET();
@@ -117,18 +116,30 @@ void	execute_builtins(int check_builtins, t_process *tmp)
 	// 	execute_EXIT();
 }
 
-void	execute(t_process	*tmp)
+
+// void	pipe_execute(t_process *tmp, char const *path_split)
+// {
+// 	//printf("tmp->argc : %d\n", tmp->argc);
+// 	//printf("%s\n", path_split);
+// }
+
+int	execute(t_process *process)
 {
 	char const	*path_envp = get_env("PATH");
+	int			builtin_idx;
 	char const	*path_split;
 
-	path_split = envp_split(path_envp, tmp->name);
+	path_split = envp_split(path_envp, process->name);
 	//printf("path_split : %s\n", path_split);
-	printf("tmp -> outfd : %d\n", tmp->out_fd);
-	printf("tmp -> outfd : %d\n", tmp->in_fd);
-	printf("tmp -> outfd : %d", tmp->bad_process);
-	//execve(path_split, tmp->argv, get_envp());
-
+	// printf("tmp -> outfd : %d\n", tmp->out_fd);
+	// printf("tmp -> outfd : %d\n", tmp->in_fd);
+	// printf("tmp -> outfd : %d\n", tmp->bad_process);
+	//pipe_execute(tmp, path_split);
+	// execve(path_split, tmp->argv, get_envp());
+	if (is_builtin(process->name, &builtin_idx))
+		return (execute_builtins(builtin_idx, process), 0);
+	else
+		return (execve(path_split, process->argv, get_envp()), 1);
 }
 
 
@@ -136,23 +147,26 @@ void	pipe_acces(t_list *p_test)
 {
 	t_process	*tmp;
 	int			i;
-	int			check_builtins;
+	int			j;
+	int			builtin_idx;
 
 	i = 0;
+	j = 0;
 	while (i < p_test->length)
 	{
 		tmp = list_get(p_test, i);
-		check_builtins = check_name_builtins(tmp->name);
-		if (check_builtins != -1)
-			execute_builtins(check_builtins, tmp);
+		if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
+			execute_builtins(builtin_idx, tmp);
 		else
 		{
-			execute(tmp);
-
+			if (fork() == 0)
+				if (execute(tmp) == 1)
+					j++;
 		}
 		i++;
 	}
-
+	while (j-- > 0)
+		wait((void *)0);
 }
 
 
@@ -160,15 +174,5 @@ void	pipe_acces(t_list *p_test)
 void	pipe_start(t_list *tokens)
 {
 	t_list p_test = compile(tokens);
-	
-	// int i;
-
-	// i = 0;
-	// while (i < p_test.length)
-	// {
-	// 	t_process *p = list_get(&p_test, i);
-	// 	printf("p->name : %s\n", p->name);
-	// 	i++;
-	// }
 	pipe_acces(&p_test);
 }
