@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 16:42:25 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 16:55:10 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	is_builtin(char *name, int *idx)
 	return (0);
 }
 
-void	execute_builtins(int builtin_idx, t_process *tmp)
+int	execute_builtins(int builtin_idx, t_process *tmp)
 {
 	if (builtin_idx == ECHO)
 		echo_main(tmp);
@@ -114,6 +114,7 @@ void	execute_builtins(int builtin_idx, t_process *tmp)
 	// 	execute_ENV();
 	// else if (check_builtins == EXIT)
 	// 	execute_EXIT();
+	return (0);
 }
 
 
@@ -137,9 +138,10 @@ int	execute(t_process *process)
 	//pipe_execute(tmp, path_split);
 	// execve(path_split, tmp->argv, get_envp());
 	if (is_builtin(process->name, &builtin_idx))
-		return (execute_builtins(builtin_idx, process), 0);
-	else
-		return (execve(path_split, process->argv, get_envp()), 1);
+		return (exit(execute_builtins(builtin_idx, process)), 0);
+	else if (execve(path_split, process->argv, get_envp()) == -1)
+		return (exit(127), 1);
+	return (1);
 }
 
 

@@ -6,13 +6,14 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:51:48 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 13:44:41 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 17:11:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "compiler.h"
 #include <libft/libft.h>
 #include <parser/tokenizer.h>
+#include <unistd.h>
 
 #define FALSE 0
 #define TRUE 1
@@ -29,13 +30,13 @@ int		set_output(t_process *process, char *filename, int append);
 int		set_input(t_process *process, char *filename);
 
 //토큰 리스트로부터 프로세스의 정보를 채워넣음
-static t_process	*parse_process( t_process *process, t_list const *tokens,
+static int	parse_process(t_process *process, t_list const *tokens,
 	int *i)
 {
 	t_token			*token;
 
 	token = list_get(tokens, *i);
-	while (*i < tokens->length && (token->type != TK_PIPE || *i == tokens->length))
+	while (*i < tokens->length && token->type != TK_PIPE)
 	{
 		if (token->type == TK_STR && process->name == (void *)0)
 			set_name(process, token->content);
@@ -58,7 +59,7 @@ static t_process	*parse_process( t_process *process, t_list const *tokens,
 		}
 		token = list_get(tokens, ++(*i));
 	}
-	return (process);
+	return (token != (void *)0);
 }
 
 //파이프라인 (|) 단위로 프로세스를 만들어 리스트에 넣고 리턴
@@ -67,14 +68,27 @@ t_list	compile(t_list const *tokens)
 	int			i;
 	t_process	*process;
 	t_list		process_list;
+	int			fd[2];
 
 	list_init(&process_list);
+	fd[0] = 0;
+	fd[1] = 1;
 	i = 0;
 	while (i < tokens->length)
 	{
 		process = allocate(sizeof(t_process));
 		process_init(process);
-		parse_process(process, tokens, &i);
+		process->in_fd = fd[1];
+		if (parse_process(process, tokens, &i))
+		{
+			if (pipe(fd) == 0)
+			{
+				if (process->out_fd == 1)
+					process->out_fd = fd[0];
+				else
+					close(fd[1]);
+			}
+		}
 		list_add(&process_list, process);
 		i++;
 	}
