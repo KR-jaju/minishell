@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 03:49:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 11:52:48 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 13:03:09 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	set_env(char const *name, char const *value)
 	}
 	env = allocate(sizeof(t_envp));
 	list_add(env_list, env);
-	env->name = str_clone(value);
+	env->name = str_clone(name);
 	env->value = str_clone(value);
 }
 

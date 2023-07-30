@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:18:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 12:02:13 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 12:39:46 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,12 @@ int	str_indexof(char const *str, char c)
 //str을 복제하는 함수
 char	*str_clone(char const *str)
 {
-	char*const	new = allocate((str_length(str) + 1) * sizeof(char));
-	char		*ptr;
+	char	*new;
+	char	*ptr;
 
 	if (str == (void *)0)
-		return (free(new), (void *)0);
+		return ((void *)0);
+	new = allocate((str_length(str) + 1) * sizeof(char));
 	ptr = new;
 	while (*str != '\0')
 		*(ptr++) = *(str++);

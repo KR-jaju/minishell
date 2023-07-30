@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 01:39:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 12:36:35 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 13:00:23 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <shell/minishell.h>
 #include <parser/parser.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static int	syntax_var_name(char const *str)
 {
@@ -38,7 +39,7 @@ static int	parse_arg(char const *str, char **name, char **value)
 {
 	int const	equals_idx = str_indexof(str, '=');
 
-	if (equals_idx != -1)
+	if (equals_idx == -1)
 	{
 		*name = str_clone(str);
 		*value = (void *)0;
@@ -57,7 +58,22 @@ static int	parse_arg(char const *str, char **name, char **value)
 
 static int	export_view(t_process *this)
 {
-	(void)this; //TODO
+	t_list*const	env_list = &g_minishell.env_list;
+	t_envp			*env;
+	int				i;
+
+	i = 0;
+	while (i < env_list->length)
+	{
+		env = list_get(env_list, i);
+		write(this->out_fd, "declare -x ", 11);
+		write(this->out_fd, env->name, str_length(env->name));
+		write(this->out_fd, "=\"", 2);
+		if (env->value != (void *)0)
+			write(this->out_fd, env->value, str_length(env->value));
+		write(this->out_fd, "\"\n", 2);
+		i++;
+	}
 	return (0);
 }
 
