@@ -2,6 +2,9 @@
 	"files.associations": {
 		"minishell.h": "c",
 		"str.h": "c",
-		"list.h": "c"
+		"list.h": "c",
+		"ostream": "c",
+		"unistd.h": "c",
+		"compiler.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 09:48:09 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 10:12:21 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int	main(int argc, char **argv, char **envp)
 		t_list p_test = compile(&tokens);
 		(void) p_test;
 		//exit(0);
-		pipe_start(&tokens);
 		//visualize(tokens);
+		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
 	}
