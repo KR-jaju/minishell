@@ -6,6 +6,7 @@
 		"ostream": "c",
 		"unistd.h": "c",
 		"compiler.h": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"typeinfo": "c"
 	}
 }
