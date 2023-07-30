@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 18:40:43 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 19:50:11 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,13 @@ int	execute(t_process *process)
 	// execve(path_split, tmp->argv, get_envp());
 	if (is_builtin(process->name, &builtin_idx))
 	{
-		return (execute_builtins(builtin_idx, process), 0);
+		execute_builtins(builtin_idx, process);
+		exit(0);
+		return (0);
 	}
 	else
 	{
-		//printf("debug");
+		printf("debug");
 		if ((execve(path_split, process->argv, get_envp()) == -1))
 			//execute_error("command not found\n", process->name);
 			return (0);
@@ -157,55 +159,103 @@ int	execute(t_process *process)
 // 프로세스가 1개이면 빌트인인지 확인
 //프로세스가 1개냐 아니냐로 분기
 
-void	pipe_acces(t_list *p_test)
+void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 {
 	t_process	*tmp;
 	int			i;
 	int			j;
 	int			builtin_idx;
 	int			pid;
-	int			pipe_fds[2] = {0, 1};
-	//int			prev_fds[2] = {0, 1};
+	//int			pipe_fds[2] = {0, 1};
+	// int			prev_fds[2] = {0, 1};
 
 	i = 0;
 	j = 0;
+	
 	while (i < p_test->length)
 	{
 		tmp = list_get(p_test, i);
-		printf("i[%d] tmp->out_fd : %d\n", i, tmp->out_fd);
-		printf("i[%d] tmp->in_fd : %d\n", i, tmp->in_fd);
+		//printf("i[%d] tmp->out_fd : %d\n", i, tmp->out_fd);
+		//printf("i[%d] tmp->in_fd : %d\n", i, tmp->in_fd);
 		if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
 			execute_builtins(builtin_idx, tmp);
 		else
 		{
+			//printf("number : %d\n" , i);
+			//printf("first : pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_fds[0], pipe_fds[1]);
+			if (i > 1)
+			{
+				close(pipe_str->pipe_fds_from_prev[0]);
+				close(pipe_str->pipe_fds_from_prev[1]);
+			}
+			//printf("first : prev_fds[0] : %d, prev_fds[1] : %d\n", pipe_str->pipe_fds_from_prev[0], pipe_str->pipe_fds_from_prev[1]);
+			//printf("first : pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_str->pipe_fds_to_next[0], pipe_str->pipe_fds_to_next[1]);
+			pipe_str->pipe_fds_from_prev[0] = pipe_str->pipe_fds_to_next[0];
+			pipe_str->pipe_fds_from_prev[1] =  pipe_str->pipe_fds_to_next[1];
+			if (i < p_test->length - 1)
+				pipe(pipe_str->pipe_fds_to_next);
 			pid = fork();
-			if (tmp->in_fd == 0)
-				tmp->in_fd = pipe_fds[0];
-			//printf("prev_fds[0] : %d, prev_fds[1] : %d\n", prev_fds[0], prev_fds[1]);
-			printf("pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_fds[0], pipe_fds[1]);
-			//prev_fds[0] = pipe_fds[0];
-			//prev_fds[1] = pipe_fds[1];
-			//printf("2 prev_fds[0] : %d, prev_fds[1] : %d\n", prev_fds[0], prev_fds[1]);
-			//printf("2 pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_fds[0], pipe_fds[1]);
-			pipe(pipe_fds);
-			//printf("3 prev_fds[0] : %d, prev_fds[1] : %d\n", prev_fds[0], prev_fds[1]);
-			printf("3 pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_fds[0], pipe_fds[1]);
-			if (tmp->out_fd == 1)
-				tmp->out_fd = pipe_fds[1];
+			//printf("second : prev_fds[0] : %d, prev_fds[1] : %d\n", pipe_str->pipe_fds_from_prev[0], pipe_str->pipe_fds_from_prev[1]);
+			//printf("second : pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_str->pipe_fds_to_next[0], pipe_str->pipe_fds_to_next[1]);
 			if (pid == -1)
 				perror("fork error");
 			else if (pid == 0)
 			{
-				execute(tmp);
-				j++;
+				//printf(" p_test->length : %d\n",  p_test->length);
+				//printf("tmp in -> %d\n" ,tmp->in_fd );
+				//printf("tmp out -> %d\n" ,tmp->out_fd );
+				// if (tmp->in_fd == 0)
+				// 	exit(1);
+				if (i == 0)//처음일때
+				{
+					printf("dfebnda");
+					printf("부모 프로세스 실행\n");
+					printf("부모 프로세스 ID: %d\n", getpid());
+					printf("자식 프로세스 ID: %d\n", pid);
+					
+					if ( p_test->length == 1)//
+					close(pipe_str->pipe_fds_to_next[0]);
+					dup2(pipe_str->pipe_fds_to_next[1], STDOUT_FILENO);
+					close(pipe_str->pipe_fds_to_next[1]);
+					execute(tmp);
+				}
+				if (i != p_test->length - 1)//중간일때
+				{
+					//dup2(pipe_str->pipe_fds_from_prev[0], STD);
+				}
+				else 
+				{
+					close(pipe_str->pipe_fds_from_prev[1]);
+					dup2(pipe_str->pipe_fds_from_prev[0], STDIN_FILENO);
+					//dup2(pipe_str->outfile, STDOUT_FILENO);
+					if (tmp->out_fd != 1)
+					{
+						dup2(tmp->out_fd, STDOUT_FILENO);
+						close(tmp->out_fd);
+					}
+					else
+						dup2(STDOUT_FILENO, 1);
+					close(pipe_str->pipe_fds_from_prev[0]);
+					
+					execute(tmp);
+				}
+
+				//execute(tmp);
 				// else
 				// 	execute_error("command not found", tmp->name);
 			}
+			else 
+				;
+				//waitpid(pid, NULL, WNOHANG);
 		}
 		i++;
 	}
-	while (j-- > 0)
-		wait((void *)0);
+	close(pipe_str->pipe_fds_from_prev[0]);
+	close(pipe_str->pipe_fds_from_prev[1]);
+	while (wait(NULL) > 0)
+		;
+	// while (j-- > 0)
+	// 	wait((void *)0);
 }
 
 
@@ -213,5 +263,6 @@ void	pipe_acces(t_list *p_test)
 void	pipe_start(t_list *tokens)
 {
 	t_list p_test = compile(tokens);
-	pipe_acces(&p_test);
+	t_pipe pipe_number;
+	pipe_acces(&p_test, &pipe_number);
 }

@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:22:54 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/29 23:19:30 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 19:01:56 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ typedef struct s_pro_join
 	char		*envp_join;
 }t_pro_join;
 
+
+typedef struct s_pipe
+{
+	int		pipe_fds_from_prev[2];
+	int		pipe_fds_to_next[2];
+}t_pipe;
 void	pipe_start(t_list *tokens);
 
 #endif
