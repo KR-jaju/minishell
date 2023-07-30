@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:51:48 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 17:11:25 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/30 20:13:56 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,7 @@ t_list	compile(t_list const *tokens)
 		process = allocate(sizeof(t_process));
 		process_init(process);
 		process->in_fd = fd[1];
-		if (parse_process(process, tokens, &i))
-		{
-			if (pipe(fd) == 0)
-			{
-				if (process->out_fd == 1)
-					process->out_fd = fd[0];
-				else
-					close(fd[1]);
-			}
-		}
+		parse_process(process, tokens, &i);
 		list_add(&process_list, process);
 		i++;
 	}
