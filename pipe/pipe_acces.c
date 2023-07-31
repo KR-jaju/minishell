@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 19:58:20 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 20:15:48 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ char	const *check_acces(char *envp, char *cmd)
 	char	*tmp;
 	char	const *envp_plus;
 
+	printf("cmd - > : %s\n", cmd);
 	tmp = str_join("/", cmd);
-	//printf("tmp : %s\n", tmp);
+	printf("tmp : %s\n", tmp);
 	envp_plus = str_join(envp, tmp);
-	//printf("envp_plus : %s\n", envp_plus);
+	printf("envp_plus : %s\n", envp_plus);
 	free(tmp);
 	return (envp_plus);
 
@@ -59,9 +60,11 @@ char const	*envp_split(char const *envp_path, char *cmd)
 			envp_split = str_tokenize((void *)0, ":");
 		if (!envp_split)
 			break ;
-		//printf("envp : %s\n", envp_split);
+		printf("envp : %s\n", envp_split);
+		printf("ls : %s\n", cmd);
 		combine = check_acces(envp_split, cmd);
-		//printf("combine : %s\n" , combine );
+		//printf("envp : %s\n", envp_split);
+		printf("combine : %s\n" , combine );
 		fd = access(combine, X_OK);
 		if (fd != -1)
 		{
@@ -134,6 +137,8 @@ int	execute(t_process *process)
 
 	write(2, "DEBUG\n", 6);
 	path_split = envp_split(path_envp, process->name);
+	printf("process->name : %s\n", process->name);
+	printf("path_split : %s\n", path_split);
 	exit(1);
 	//printf("path_split : %s\n", path_split);
 	// printf("tmp -> outfd : %d\n", tmp->out_fd);
@@ -184,6 +189,7 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 	while (i < p_test->length)
 	{
 		tmp = list_get(p_test, i);
+		printf("tmp -> name %s\n",tmp->name);
 		//printf("i[%d] tmp->out_fd : %d\n", i, tmp->out_fd);
 		//printf("i[%d] tmp->in_fd : %d\n", i, tmp->in_fd);
 		if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
