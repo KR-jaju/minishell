@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compiler.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:51:48 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 20:13:56 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/31 17:12:39 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,13 @@ t_list	compile(t_list const *tokens)
 	int			i;
 	t_process	*process;
 	t_list		process_list;
-	int			fd[2];
 
 	list_init(&process_list);
-	fd[0] = 0;
-	fd[1] = 1;
 	i = 0;
 	while (i < tokens->length)
 	{
 		process = allocate(sizeof(t_process));
 		process_init(process);
-		process->in_fd = fd[1];
 		parse_process(process, tokens, &i);
 		list_add(&process_list, process);
 		i++;
