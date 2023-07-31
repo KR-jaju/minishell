@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/31 19:57:22 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 21:08:14 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		str = readline("minishell$ ");
+		//printf("DEBUG");
 		if (str == (void *)0)
 			exit(1);
+		//printf("DEBUG12");
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
@@ -77,9 +79,10 @@ int	main(int argc, char **argv, char **envp)
 		t_list p_test = compile(&tokens);
 		(void) p_test;
 		//exit(0);
-		visualize(tokens);
+		//visualize(tokens);
 		
 		pipe_start(&tokens);
+		//exit(0);
 		heredoc_unlink_tmp();
 		free(str);
 	}

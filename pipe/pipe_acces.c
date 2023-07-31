@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 20:15:48 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 21:15:30 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ char	const *check_acces(char *envp, char *cmd)
 	char	*tmp;
 	char	const *envp_plus;
 
-	printf("cmd - > : %s\n", cmd);
+	//printf("cmd - > : %s\n", cmd);
 	tmp = str_join("/", cmd);
-	printf("tmp : %s\n", tmp);
+	//printf("tmp : %s\n", tmp);
 	envp_plus = str_join(envp, tmp);
-	printf("envp_plus : %s\n", envp_plus);
+	//printf("envp_plus : %s\n", envp_plus);
 	free(tmp);
 	return (envp_plus);
 
@@ -60,11 +60,11 @@ char const	*envp_split(char const *envp_path, char *cmd)
 			envp_split = str_tokenize((void *)0, ":");
 		if (!envp_split)
 			break ;
-		printf("envp : %s\n", envp_split);
-		printf("ls : %s\n", cmd);
+		//printf("envp : %s\n", envp_split);
+		//printf("ls : %s\n", cmd);
 		combine = check_acces(envp_split, cmd);
 		//printf("envp : %s\n", envp_split);
-		printf("combine : %s\n" , combine );
+		//printf("combine : %s\n" , combine );
 		fd = access(combine, X_OK);
 		if (fd != -1)
 		{
@@ -135,11 +135,11 @@ int	execute(t_process *process)
 	int			builtin_idx;
 	char const	*path_split;
 
-	write(2, "DEBUG\n", 6);
+	//write(2, "DEBUG\n", 6);
 	path_split = envp_split(path_envp, process->name);
-	printf("process->name : %s\n", process->name);
-	printf("path_split : %s\n", path_split);
-	exit(1);
+	//printf("process->name : %s\n", process->name);
+	//printf("path_split : %s\n", path_split);
+	//exit(1);
 	//printf("path_split : %s\n", path_split);
 	// printf("tmp -> outfd : %d\n", tmp->out_fd);
 	// printf("tmp -> outfd : %d\n", tmp->in_fd);
@@ -155,11 +155,11 @@ int	execute(t_process *process)
 	else
 	{
 		//printf("debug");
-		write(2, path_split, str_length(path_split));
-		write(2, "\n", 1);
-		write(2, "argv : ", 8);
-		write(2, process->argv[0], str_length(process->argv[0]));
-		write(2, "argv awdawd : ", 14);
+		// write(2, path_split, str_length(path_split));
+		// write(2, "\n", 1);
+		// write(2, "argv : ", 8);
+		// write(2, process->argv[0], str_length(process->argv[0]));
+		// write(2, "argv awdawd : ", 14);
 		if ((execve(path_split, process->argv, get_envp()) == -1))
 			execute_error("command not found\n", process->name);
 			//return (0);
@@ -185,11 +185,14 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 	i = 0;
 	j = 0;
 	
-	printf("p_test : %d\n", p_test->length);
+	//printf("p_test : %d\n", p_test->length);
 	while (i < p_test->length)
 	{
 		tmp = list_get(p_test, i);
-		printf("tmp -> name %s\n",tmp->name);
+		printf("infile number : %d\n", tmp->in_fd);
+		write(4, "awd", 3);
+		printf("infile number : %d\n", tmp->out_fd);
+		//printf("tmp -> name %s\n",tmp->name);
 		//printf("i[%d] tmp->out_fd : %d\n", i, tmp->out_fd);
 		//printf("i[%d] tmp->in_fd : %d\n", i, tmp->in_fd);
 		if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
@@ -230,7 +233,7 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 					//if ( p_test->length == 1)//
 					if (tmp->in_fd == 0 && p_test->length == 1)
 					{
-						write(2, "fuck\n", 5);
+						//write(2, "fuck\n", 5);
 						execute(tmp);
 					}
 					else
@@ -272,8 +275,16 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 		}
 		i++;
 	}
-	close(pipe_str->pipe_fds_from_prev[0]);
-	close(pipe_str->pipe_fds_from_prev[1]);
+	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
+	{
+
+	}
+	else if (pipe_str->pipe_fds_from_prev[0] != 0)
+	{
+		close(pipe_str->pipe_fds_from_prev[0]);
+		//close(pipe_str->pipe_fds_from_prev[1]);
+	}
+
 	while (wait(NULL) > 0)
 		;
 	// while (j-- > 0)
