@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 18:19:47 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 19:57:22 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ void	visualize(t_list tokens)
 	int		i;
 	t_token	*token;
 
-	printf("syntax_wrong: %d\n\n", syntax_check(&tokens));
+	//printf("syntax_wrong: %d\n\n", syntax_check(&tokens));
 	i = 0;
 	while (i < tokens.length)
 	{
 		token = list_get(&tokens, i);
 		if (token->type == TK_STR)
 		{
-			printf("%s\n", token->content);
+			//printf("%s\n", token->content);
 			free(token->content);
 		}
 		else if (token->type == TK_IRD)
@@ -77,7 +77,8 @@ int	main(int argc, char **argv, char **envp)
 		t_list p_test = compile(&tokens);
 		(void) p_test;
 		//exit(0);
-		//visualize(tokens);
+		visualize(tokens);
+		
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);

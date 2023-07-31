@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 19:50:11 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 19:58:20 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char const	*envp_split(char const *envp_path, char *cmd)
 			envp_split = str_tokenize((void *)0, ":");
 		if (!envp_split)
 			break ;
+		//printf("envp : %s\n", envp_split);
 		combine = check_acces(envp_split, cmd);
 		//printf("combine : %s\n" , combine );
 		fd = access(combine, X_OK);
@@ -70,7 +71,7 @@ char const	*envp_split(char const *envp_path, char *cmd)
 		close(fd);
 		//free(combine);
 	}
-	
+
 	return (NULL);
 }
 
@@ -131,7 +132,9 @@ int	execute(t_process *process)
 	int			builtin_idx;
 	char const	*path_split;
 
+	write(2, "DEBUG\n", 6);
 	path_split = envp_split(path_envp, process->name);
+	exit(1);
 	//printf("path_split : %s\n", path_split);
 	// printf("tmp -> outfd : %d\n", tmp->out_fd);
 	// printf("tmp -> outfd : %d\n", tmp->in_fd);
@@ -146,10 +149,15 @@ int	execute(t_process *process)
 	}
 	else
 	{
-		printf("debug");
+		//printf("debug");
+		write(2, path_split, str_length(path_split));
+		write(2, "\n", 1);
+		write(2, "argv : ", 8);
+		write(2, process->argv[0], str_length(process->argv[0]));
+		write(2, "argv awdawd : ", 14);
 		if ((execve(path_split, process->argv, get_envp()) == -1))
-			//execute_error("command not found\n", process->name);
-			return (0);
+			execute_error("command not found\n", process->name);
+			//return (0);
 		return (1);
 	}
 }
@@ -172,6 +180,7 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 	i = 0;
 	j = 0;
 	
+	printf("p_test : %d\n", p_test->length);
 	while (i < p_test->length)
 	{
 		tmp = list_get(p_test, i);
@@ -208,16 +217,24 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 				// 	exit(1);
 				if (i == 0)//처음일때
 				{
-					printf("dfebnda");
-					printf("부모 프로세스 실행\n");
-					printf("부모 프로세스 ID: %d\n", getpid());
-					printf("자식 프로세스 ID: %d\n", pid);
+					// printf("dfebnda");
+					// printf("부모 프로세스 실행\n");
+					// printf("부모 프로세스 ID: %d\n", getpid());
+					// printf("자식 프로세스 ID: %d\n", pid);
+					//if ( p_test->length == 1)//
+					if (tmp->in_fd == 0 && p_test->length == 1)
+					{
+						write(2, "fuck\n", 5);
+						execute(tmp);
+					}
+					else
+					{
+						close(pipe_str->pipe_fds_to_next[0]);
+						dup2(pipe_str->pipe_fds_to_next[1], STDOUT_FILENO);
+						close(pipe_str->pipe_fds_to_next[1]);
+						execute(tmp);
+					}
 					
-					if ( p_test->length == 1)//
-					close(pipe_str->pipe_fds_to_next[0]);
-					dup2(pipe_str->pipe_fds_to_next[1], STDOUT_FILENO);
-					close(pipe_str->pipe_fds_to_next[1]);
-					execute(tmp);
 				}
 				if (i != p_test->length - 1)//중간일때
 				{
@@ -239,7 +256,6 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 					
 					execute(tmp);
 				}
-
 				//execute(tmp);
 				// else
 				// 	execute_error("command not found", tmp->name);
