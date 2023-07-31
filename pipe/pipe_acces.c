@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 21:15:30 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 21:34:05 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,7 +295,7 @@ void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
 
 void	pipe_start(t_list *tokens)
 {
-	t_list p_test = compile(tokens);
+	// t_list p_test = compile(tokens);
 	t_pipe pipe_number;
-	pipe_acces(&p_test, &pipe_number);
+	pipe_acces(tokens, &pipe_number);
 }

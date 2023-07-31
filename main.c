@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/31 21:08:14 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 21:33:33 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,10 @@ int	main(int argc, char **argv, char **envp)
 		tokens = tokenize_command(str);
 		heredoc_substitute(&tokens);
 		t_list p_test = compile(&tokens);
-		(void) p_test;
 		//exit(0);
 		//visualize(tokens);
 		
-		pipe_start(&tokens);
+		pipe_start(&p_test);
 		//exit(0);
 		heredoc_unlink_tmp();
 		free(str);
