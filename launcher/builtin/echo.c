@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:08:14 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 20:01:59 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/31 21:03:17 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 
-int	is_n_flag(char *str)
+int	is_n_flag(char const *str)
 {
 	int	i;
 
