@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 17:23:54 by jaju             ###   ########.fr       */
+/*   Updated: 2023/07/31 21:36:55 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "../shell/minishell.h"
 #include "../str/str.h"
 #include "../parser/compiler.h"
+#include <errno.h>
+#include <string.h>
 
 void	echo_main(t_process *this);
 int 	pwd_main(t_process *this);
@@ -140,7 +142,7 @@ int	execute(t_process *process)
 	else
 	{
 		if (execve(path_split, process->argv, get_envp()) == -1)
-			exit(1);
+			printf("err: %s \n", strerror(errno));
 		return (1);
 	}
 }
@@ -166,6 +168,7 @@ void	pipe_acces(t_list *p_test)
 		dup2(tmp->out_fd, 1);
 		execute_builtins(builtin_idx, tmp);
 		dup2(stdout_copy, 1);
+		close(stdout_copy);
 	}
 	else // 그 외 일반적인 경우
 	{	
@@ -177,7 +180,10 @@ void	pipe_acces(t_list *p_test)
 			if (i != p_test->length - 1) // 현재 프로세스가 마지막 프로세스가 아니라면
 				pipe(next); //파이프 생성
 			else
-				next[1] = dup(1); // (닫을 수 있는) 표준 출력을 next fd에 넣는다.
+			{
+				next[0] = dup(0);// (닫을 수 있는) 표준 출력을 next fd에 넣는다.
+				next[1] = dup(1);
+			}
 			pid = fork(); // 자식 프로세스 생성
 			if (pid == 0) // 자식 프로세스
 			{

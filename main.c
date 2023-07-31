@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 18:19:47 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/31 21:31:57 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ int	main(int argc, char **argv, char **envp)
 	{
 		str = readline("minishell$ ");
 		if (str == (void *)0)
-			exit(1);
+			exit(111);
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
 		tokens = tokenize_command(str);
 		heredoc_substitute(&tokens);
-		t_list p_test = compile(&tokens);
-		(void) p_test;
+		//t_list p_test = compile(&tokens);
+		//(void) p_test;
 		//exit(0);
 		//visualize(tokens);
 		pipe_start(&tokens);
