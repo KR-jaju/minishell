@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 23:35:40 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 01:02:35 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #include <parser/compiler.h>
 #include <signal/signal.h>
 
+
+void sigtermHandler(int sign);
 
 void	visualize(t_list tokens)
 {
@@ -66,14 +68,20 @@ int	main(int argc, char **argv, char **envp)
 	t_list	tokens;
 
 	minishell_init(envp);
-	all_signal();
+	//all_signal();
 	while (1)
 	{
-		
+		all_signal();
 		str = readline("minishell$ ");
-		signal(SIGINT, sigintHandler);
+		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
-			exit(111);
+		{
+			//signal(SIGTERM, sigtermHandler);
+			printf("\b\b  \b\b");
+			printf("exit\n");
+			exit(g_minishell.exit_code = 0);
+		}
+			
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
