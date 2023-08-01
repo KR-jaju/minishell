@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 01:27:28 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 03:42:30 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	str_push(char **str, char c)
 
 	if (is_power_of_two(len + 1))
 	{
-		new = allocate(len * 2);
+		new = allocate(len * 2 + 2);
 		copy(*str, new, len);
 		free(*str);
 		(*str) = new;
@@ -50,6 +50,7 @@ static void	str_push_str(char **new, char const *str)
 	}
 }
 
+//작은 따옴표 안의 내용 파싱
 int	unquote_single(char const *src, char**dst)
 {
 	int	i;
@@ -63,6 +64,7 @@ int	unquote_single(char const *src, char**dst)
 	return (i + 1);
 }
 
+//int를 문자열로 변환
 char	*int_to_str(int i)
 {
 	long long	abs;
@@ -88,6 +90,7 @@ char	*int_to_str(int i)
 	return (new);
 }
 
+//$로 시작하는 문자열에서 변수 이름을 찾고 그 값을 리턴
 int	parse_var(char const *src, char **out)
 {
 	char	*name;
@@ -108,6 +111,7 @@ int	parse_var(char const *src, char **out)
 	return ((*out) = (void *)0, 1);
 }
 
+//큰 따옴표 안의 내용을 파싱
 int	unquote_double(char const *src, char **dst)
 {
 	char	*value;
@@ -136,6 +140,7 @@ int	unquote_double(char const *src, char **dst)
 	return (i + 1);
 }
 
+//따옴표가 붙지 않은 경우
 int	unquote_normal(char const *src, char **dst)
 {
 	char	*value;

@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 01:13:20 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 03:47:12 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 //리다이렉션, 파이프라인과 같은 기호를 토큰으로 만듦
-static int	tokenize_symbol(char **str, t_token *token)
+static int	tokenize_symbol(char const **str, t_token *token)
 {
 	token->type = TK_INVALID;
 	token->content = (void *)0;
@@ -43,9 +43,9 @@ static int	tokenize_symbol(char **str, t_token *token)
 }
 
 //기호가 아닌 나머지를 토큰으로 만듦
-static int	tokenize_non_symbol(char **str, t_token *token)
+static int	tokenize_non_symbol(char const **str, t_token *token)
 {
-	int			i;
+	int	i;
 
 	token->type = TK_STR;
 	i = 0;
@@ -67,9 +67,9 @@ static int	tokenize_non_symbol(char **str, t_token *token)
 }
 
 // | < << > >> whitespace를 기준으로 토큰을 나눔
-int	tokenize(char *s, t_token **token)
+int	tokenize(char const *s, t_token **token)
 {
-	static char	*str;
+	static char const	*str;
 
 	if (s != (void *)0)
 		str = s;
@@ -87,7 +87,7 @@ int	tokenize(char *s, t_token **token)
 }
 
 //주어진 문자열을 토큰 리스트로 만들어 리턴함
-int	tokenize_command(char *str, t_list *list)
+int	tokenize_command(char const *str, t_list *list)
 {
 	t_token	*token;
 
