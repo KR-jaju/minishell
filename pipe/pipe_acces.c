@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_acces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/01 15:50:00 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/01 17:27:37 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ int 	pwd_main(t_process *this);
 void	cd_main(t_process *this);
 int		export_main(t_process *this);
 int		execute(t_process *process);
+int		env_main(t_process *this);
 int		exit_main(t_process *this);
+int		unset_main(t_process *this);
 void	execute_error(char *tmp, char *name);
 
 char	const *check_acces(char *envp, char *cmd)
@@ -114,12 +116,12 @@ int	execute_builtins(int builtin_idx, t_process *tmp)
 		cd_main(tmp);
 	else if (builtin_idx == PWD)
 		pwd_main(tmp);
-	 else if (builtin_idx == EXPORT)
+	else if (builtin_idx == EXPORT)
 	 	export_main(tmp);
-	// else if (check_builtins == UNSET)
-	// 	execute_UNSET();
-	// else if (check_builtins == ENV)
-	// 	execute_ENV();
+	else if (builtin_idx == UNSET)
+		unset_main(tmp);
+	else if (builtin_idx == ENV)
+		env_main(tmp);
 	else if (builtin_idx == EXIT)
 		exit_main(tmp);
 	return (0);
@@ -215,7 +217,15 @@ void	pipe_acces(t_list *p_test)
 			i++;
 		}
 		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
+		while (wait((void *)0) > 0)
+			;
 	}
-	while (wait((void *)0) > 0)
-		;
+}
+
+
+
+void	pipe_start(t_list *tokens)
+{
+	t_list p_test = compile(tokens);
+	pipe_acces(&p_test);
 }

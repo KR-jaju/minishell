@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 01:39:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 13:00:23 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 12:06:55 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <parser/parser.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static int	syntax_var_name(char const *str)
 {
@@ -56,7 +57,7 @@ static int	parse_arg(char const *str, char **name, char **value)
 //export var=value: 없으면 값 생성 후 대입, 있으면 그냥 대입
 //export: 모든 환경변수를 보여줌. 환경변수 값은 ""로 감쌈, 값이 없는 변수는 이름만 보임
 
-static int	export_view(t_process *this)
+static int	export_view()
 {
 	t_list*const	env_list = &g_minishell.env_list;
 	t_envp			*env;
@@ -66,12 +67,10 @@ static int	export_view(t_process *this)
 	while (i < env_list->length)
 	{
 		env = list_get(env_list, i);
-		write(this->out_fd, "declare -x ", 11);
-		write(this->out_fd, env->name, str_length(env->name));
-		write(this->out_fd, "=\"", 2);
-		if (env->value != (void *)0)
-			write(this->out_fd, env->value, str_length(env->value));
-		write(this->out_fd, "\"\n", 2);
+		if (env->value == (void *)0)
+			printf("declare -x %s\n", env->name);
+		else
+			printf("declare -x %s=\"%s\"\n", env->name, env->value);
 		i++;
 	}
 	return (0);
@@ -105,7 +104,7 @@ static int	export_set(t_process *this)
 int	export_main(t_process *this)
 {
 	if (this->argc == 1)
-		return (export_view(this));
+		return (export_view());
 	else
 		return (export_set(this));
 }

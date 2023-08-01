@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 03:49:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 13:03:09 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 13:03:44 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	remove_env(char const *name)
 	while (i < env_list->length)
 	{
 		env = list_get(env_list, i);
-		if (str_equals(name, env->name))
+		if (str_equals(env->name, name))
 			break ;
 		i++;
 	}
@@ -91,14 +91,15 @@ char	**get_envp(void)
 	char**const		envp = allocate((env_list->length + 1) * sizeof(char *));
 	t_envp			*env;
 	int				i;
+	int				j;
 
 	i = 0;
+	j = 0;
 	while (i < env_list->length)
 	{
 		env = list_get(env_list, i);
-		if (env == (void *)0)
-			continue ;
-		envp[i] = env_to_str(env);
+		if (env->value != (void *)0)
+			envp[j++] = env_to_str(env);
 		i++;
 	}
 	return (envp);
