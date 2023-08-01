@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/01 15:55:28 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/01 17:16:51 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,17 @@
 #include "../shell/minishell.h"
 #include "../str/str.h"
 #include "../parser/compiler.h"
+#include <errno.h>
+#include <string.h>
 
 void	echo_main(t_process *this);
 int 	pwd_main(t_process *this);
 void	cd_main(t_process *this);
 int		export_main(t_process *this);
 int		execute(t_process *process);
+int		env_main(t_process *this);
 int		exit_main(t_process *this);
+int		unset_main(t_process *this);
 void	execute_error(char *tmp, char *name);
 
 char	const *check_acces(char *envp, char *cmd)
@@ -108,12 +112,12 @@ int	execute_builtins(int builtin_idx, t_process *tmp)
 		cd_main(tmp);
 	else if (builtin_idx == PWD)
 		pwd_main(tmp);
-	 else if (builtin_idx == EXPORT)
+	else if (builtin_idx == EXPORT)
 	 	export_main(tmp);
-	// else if (check_builtins == UNSET)
-	// 	execute_UNSET();
-	// else if (check_builtins == ENV)
-	// 	execute_ENV();
+	else if (builtin_idx == UNSET)
+		unset_main(tmp);
+	else if (builtin_idx == ENV)
+		env_main(tmp);
 	else if (builtin_idx == EXIT)
 		exit_main(tmp);
 	return (0);
@@ -140,7 +144,11 @@ int	execute(t_process *process)
 	else
 	{
 		if (execve(path_split, process->argv, get_envp()) == -1)
-			exit(1);
+		{
+			printf("bash: %s: command not found\n", process->argv[0]);
+			exit(127);
+			//printf("err: %s \n", strerror(errno));
+		}
 		return (1);
 	}
 }
@@ -158,6 +166,9 @@ void	pipe_acces(t_list *p_test)
 	int			pid;
 	int			prev_read_fd;
 	int			next[2] = {0, 1};
+	//
+	int			last_pid;
+	//
 
 	tmp = list_get(p_test, 0);
 	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx)) // fork 없이 빌트인 실행 조건
@@ -166,6 +177,7 @@ void	pipe_acces(t_list *p_test)
 		dup2(tmp->out_fd, 1);
 		execute_builtins(builtin_idx, tmp);
 		dup2(stdout_copy, 1);
+		close(stdout_copy);
 	}
 	else // 그 외 일반적인 경우
 	{	
@@ -177,8 +189,15 @@ void	pipe_acces(t_list *p_test)
 			if (i != p_test->length - 1) // 현재 프로세스가 마지막 프로세스가 아니라면
 				pipe(next); //파이프 생성
 			else
-				next[1] = dup(1); // (닫을 수 있는) 표준 출력을 next fd에 넣는다.
+			{
+				next[0] = dup(0);// (닫을 수 있는) 표준 출력을 next fd에 넣는다.
+				next[1] = dup(1);
+			}
 			pid = fork(); // 자식 프로세스 생성
+			//
+			if (i == p_test->length - 1)
+				last_pid = pid;
+			//
 			if (pid == 0) // 자식 프로세스
 			{
 				if (tmp->in_fd == 0) // Input redirection이 없을 때는
@@ -201,13 +220,22 @@ void	pipe_acces(t_list *p_test)
 				close(prev_read_fd);// 이전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
 				close(next[1]);// 다음 파이프에 출력하는 것도 더이상 필요 없다.
 				prev_read_fd = next[0];
+
+				if (i == p_test->length - 1)
+				{
+					while (waitpid(last_pid, &g_minishell.exit_code, 0) > 0)
+						;
+					if (WIFEXITED(g_minishell.exit_code))
+						g_minishell.exit_code = WEXITSTATUS(g_minishell.exit_code);
+				}
 			}
 			i++;
 		}
 		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
+		while (wait((void *)0) > 0)
+			;
+
 	}
-	while (wait((void *)0) > 0)
-		;
 }
 
 

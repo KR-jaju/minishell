@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/29 22:25:57 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/31 21:04:08 by jaju             ###   ########.fr       */
+/*   Created: 2023/08/01 13:09:29 by jaju              #+#    #+#             */
+/*   Updated: 2023/08/01 13:12:29 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser/compiler.h>
-#include <unistd.h>
+#include <shell/minishell.h>
 #include <stdio.h>
-#include <limits.h>
-#include <libft/libft.h>
-#include <str/str.h>
 
-int	pwd_main(t_process *this)
+int	env_main(t_process *this)
 {
-	char	pwd[PATH_MAX];
+	t_list*const	env_list = &g_minishell.env_list;
+	t_envp			*env;
+	int				i;
 
-	if (this->argc != 1)
-		panic("pwd: too many arguments");
-	if (getcwd(pwd, PATH_MAX) != (void *)0)
-		printf("%s\n", pwd);
+	(void)this;
+	i = 0;
+	while (i < env_list->length)
+	{
+		env = list_get(env_list, i);
+		if (env->value != (void *)0)
+			printf("%s=%s\n", env->name, env->value);
+		i++;
+	}
 	return (0);
 }

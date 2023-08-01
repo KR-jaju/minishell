@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:21:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:25:16 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 11:57:03 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	list_init(t_list *this);
 void	list_add(t_list *this, void *element);
 //리쇼트에서 포인터를 가져오기
 void	*list_get(t_list const *this, int i);
+//리스트에서 주어진 인덱스의 값을 제거
+void	*list_remove(t_list *this, int i);
 //리스트 해제, 내용물은 해제하지 않음
 void	list_free(t_list *this);
 //리스트 해제, 내용물까지 해제

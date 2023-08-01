@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 15:55:15 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/01 16:14:17 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,17 @@ int	main(int argc, char **argv, char **envp)
 	{
 		str = readline("minishell$ ");
 		if (str == (void *)0)
-			exit(1);
+			exit(111);
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
 		tokens = tokenize_command(str);
-		//heredoc_substitute(&tokens);
+		heredoc_substitute(&tokens);
 		//t_list p_test = compile(&tokens);
+		//(void) p_test;
 		//exit(0);
 		//visualize(tokens);
+		//exit(1);
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
