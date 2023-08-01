@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/31 21:08:48 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/29 20:31:09 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 {
 	char*const	name = heredoc_filename(idx);
 	int const	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	printf("heredoc_fd : %d\n", fd);
 	char*const	parsed_delim = unquote(delim->content);
 	char		*str;
 

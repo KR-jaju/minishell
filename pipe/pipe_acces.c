@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 21:34:05 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/01 15:55:28 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	const *check_acces(char *envp, char *cmd)
 	char	*tmp;
 	char	const *envp_plus;
 
-	//printf("cmd - > : %s\n", cmd);
 	tmp = str_join("/", cmd);
 	//printf("tmp : %s\n", tmp);
 	envp_plus = str_join(envp, tmp);
@@ -60,10 +59,7 @@ char const	*envp_split(char const *envp_path, char *cmd)
 			envp_split = str_tokenize((void *)0, ":");
 		if (!envp_split)
 			break ;
-		//printf("envp : %s\n", envp_split);
-		//printf("ls : %s\n", cmd);
 		combine = check_acces(envp_split, cmd);
-		//printf("envp : %s\n", envp_split);
 		//printf("combine : %s\n" , combine );
 		fd = access(combine, X_OK);
 		if (fd != -1)
@@ -74,7 +70,7 @@ char const	*envp_split(char const *envp_path, char *cmd)
 		close(fd);
 		//free(combine);
 	}
-
+	
 	return (NULL);
 }
 
@@ -104,7 +100,7 @@ int	is_builtin(char *name, int *idx)
 	return (0);
 }
 
-void	execute_builtins(int builtin_idx, t_process *tmp)
+int	execute_builtins(int builtin_idx, t_process *tmp)
 {
 	if (builtin_idx == ECHO)
 		echo_main(tmp);
@@ -120,6 +116,7 @@ void	execute_builtins(int builtin_idx, t_process *tmp)
 	// 	execute_ENV();
 	else if (builtin_idx == EXIT)
 		exit_main(tmp);
+	return (0);
 }
 
 
@@ -135,34 +132,15 @@ int	execute(t_process *process)
 	int			builtin_idx;
 	char const	*path_split;
 
-	//write(2, "DEBUG\n", 6);
 	path_split = envp_split(path_envp, process->name);
-	//printf("process->name : %s\n", process->name);
-	//printf("path_split : %s\n", path_split);
-	//exit(1);
-	//printf("path_split : %s\n", path_split);
-	// printf("tmp -> outfd : %d\n", tmp->out_fd);
-	// printf("tmp -> outfd : %d\n", tmp->in_fd);
-	// printf("tmp -> outfd : %d\n", tmp->bad_process);
-	//pipe_execute(tmp, path_split);
-	// execve(path_split, tmp->argv, get_envp());
 	if (is_builtin(process->name, &builtin_idx))
 	{
-		execute_builtins(builtin_idx, process);
-		exit(0);
-		return (0);
+		return (exit(execute_builtins(builtin_idx, process)), 0);
 	}
 	else
 	{
-		//printf("debug");
-		// write(2, path_split, str_length(path_split));
-		// write(2, "\n", 1);
-		// write(2, "argv : ", 8);
-		// write(2, process->argv[0], str_length(process->argv[0]));
-		// write(2, "argv awdawd : ", 14);
-		if ((execve(path_split, process->argv, get_envp()) == -1))
-			execute_error("command not found\n", process->name);
-			//return (0);
+		if (execve(path_split, process->argv, get_envp()) == -1)
+			exit(1);
 		return (1);
 	}
 }
@@ -171,131 +149,71 @@ int	execute(t_process *process)
 
 // 프로세스가 1개이면 빌트인인지 확인
 //프로세스가 1개냐 아니냐로 분기
-
-void	pipe_acces(t_list *p_test, t_pipe *pipe_str)
+#include <libft/libft.h>
+void	pipe_acces(t_list *p_test)
 {
 	t_process	*tmp;
 	int			i;
-	int			j;
 	int			builtin_idx;
 	int			pid;
-	//int			pipe_fds[2] = {0, 1};
-	// int			prev_fds[2] = {0, 1};
+	int			prev_read_fd;
+	int			next[2] = {0, 1};
 
-	i = 0;
-	j = 0;
-	
-	//printf("p_test : %d\n", p_test->length);
-	while (i < p_test->length)
+	tmp = list_get(p_test, 0);
+	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx)) // fork 없이 빌트인 실행 조건
 	{
-		tmp = list_get(p_test, i);
-		printf("infile number : %d\n", tmp->in_fd);
-		write(4, "awd", 3);
-		printf("infile number : %d\n", tmp->out_fd);
-		//printf("tmp -> name %s\n",tmp->name);
-		//printf("i[%d] tmp->out_fd : %d\n", i, tmp->out_fd);
-		//printf("i[%d] tmp->in_fd : %d\n", i, tmp->in_fd);
-		if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
-			execute_builtins(builtin_idx, tmp);
-		else
+		int stdout_copy = dup(1);
+		dup2(tmp->out_fd, 1);
+		execute_builtins(builtin_idx, tmp);
+		dup2(stdout_copy, 1);
+	}
+	else // 그 외 일반적인 경우
+	{	
+		i = 0;
+		prev_read_fd = dup(0);
+		while (i < p_test->length)
 		{
-			//printf("number : %d\n" , i);
-			//printf("first : pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_fds[0], pipe_fds[1]);
-			if (i > 1)
+			tmp = list_get(p_test, i);
+			if (i != p_test->length - 1) // 현재 프로세스가 마지막 프로세스가 아니라면
+				pipe(next); //파이프 생성
+			else
+				next[1] = dup(1); // (닫을 수 있는) 표준 출력을 next fd에 넣는다.
+			pid = fork(); // 자식 프로세스 생성
+			if (pid == 0) // 자식 프로세스
 			{
-				close(pipe_str->pipe_fds_from_prev[0]);
-				close(pipe_str->pipe_fds_from_prev[1]);
+				if (tmp->in_fd == 0) // Input redirection이 없을 때는
+					tmp->in_fd = prev_read_fd; // 그 자리를 이전 파이프에서 받는 fd로 채운다
+				else
+					close(prev_read_fd);
+				if (tmp->out_fd == 1) // Output redirection이 없을 때는
+					tmp->out_fd = next[1]; // 그 자리를 다음 파이프에 쓰는 fd로 채운다
+				else
+					close(next[1]);
+				dup2(tmp->in_fd, 0); // 표준 입출력이 in_fd와 out_fd를 대체하도록 한다
+				dup2(tmp->out_fd, 1);
+				close(tmp->out_fd);
+				close(tmp->in_fd); // in_fd와 out_fd는 닫아도 된다.
+				close(next[0]);// 남은 fd는 다음 파이프에서 받는 fd뿐
+				execute(tmp);
 			}
-			//printf("first : prev_fds[0] : %d, prev_fds[1] : %d\n", pipe_str->pipe_fds_from_prev[0], pipe_str->pipe_fds_from_prev[1]);
-			//printf("first : pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_str->pipe_fds_to_next[0], pipe_str->pipe_fds_to_next[1]);
-			pipe_str->pipe_fds_from_prev[0] = pipe_str->pipe_fds_to_next[0];
-			pipe_str->pipe_fds_from_prev[1] =  pipe_str->pipe_fds_to_next[1];
-			if (i < p_test->length - 1)
-				pipe(pipe_str->pipe_fds_to_next);
-			pid = fork();
-			//printf("second : prev_fds[0] : %d, prev_fds[1] : %d\n", pipe_str->pipe_fds_from_prev[0], pipe_str->pipe_fds_from_prev[1]);
-			//printf("second : pipe_fds[0] : %d, pipe_fds[1] : %d\n", pipe_str->pipe_fds_to_next[0], pipe_str->pipe_fds_to_next[1]);
-			if (pid == -1)
-				perror("fork error");
-			else if (pid == 0)
+			else if (pid > 0)
 			{
-				//printf(" p_test->length : %d\n",  p_test->length);
-				//printf("tmp in -> %d\n" ,tmp->in_fd );
-				//printf("tmp out -> %d\n" ,tmp->out_fd );
-				// if (tmp->in_fd == 0)
-				// 	exit(1);
-				if (i == 0)//처음일때
-				{
-					// printf("dfebnda");
-					// printf("부모 프로세스 실행\n");
-					// printf("부모 프로세스 ID: %d\n", getpid());
-					// printf("자식 프로세스 ID: %d\n", pid);
-					//if ( p_test->length == 1)//
-					if (tmp->in_fd == 0 && p_test->length == 1)
-					{
-						//write(2, "fuck\n", 5);
-						execute(tmp);
-					}
-					else
-					{
-						close(pipe_str->pipe_fds_to_next[0]);
-						dup2(pipe_str->pipe_fds_to_next[1], STDOUT_FILENO);
-						close(pipe_str->pipe_fds_to_next[1]);
-						execute(tmp);
-					}
-					
-				}
-				if (i != p_test->length - 1)//중간일때
-				{
-					//dup2(pipe_str->pipe_fds_from_prev[0], STD);
-				}
-				else 
-				{
-					close(pipe_str->pipe_fds_from_prev[1]);
-					dup2(pipe_str->pipe_fds_from_prev[0], STDIN_FILENO);
-					//dup2(pipe_str->outfile, STDOUT_FILENO);
-					if (tmp->out_fd != 1)
-					{
-						dup2(tmp->out_fd, STDOUT_FILENO);
-						close(tmp->out_fd);
-					}
-					else
-						dup2(STDOUT_FILENO, 1);
-					close(pipe_str->pipe_fds_from_prev[0]);
-					
-					execute(tmp);
-				}
-				//execute(tmp);
-				// else
-				// 	execute_error("command not found", tmp->name);
+				close(prev_read_fd);// 이전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
+				close(next[1]);// 다음 파이프에 출력하는 것도 더이상 필요 없다.
+				prev_read_fd = next[0];
 			}
-			else 
-				;
-				//waitpid(pid, NULL, WNOHANG);
+			i++;
 		}
-		i++;
+		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
 	}
-	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx))
-	{
-
-	}
-	else if (pipe_str->pipe_fds_from_prev[0] != 0)
-	{
-		close(pipe_str->pipe_fds_from_prev[0]);
-		//close(pipe_str->pipe_fds_from_prev[1]);
-	}
-
-	while (wait(NULL) > 0)
+	while (wait((void *)0) > 0)
 		;
-	// while (j-- > 0)
-	// 	wait((void *)0);
 }
 
 
 
 void	pipe_start(t_list *tokens)
 {
-	// t_list p_test = compile(tokens);
-	t_pipe pipe_number;
-	pipe_acces(tokens, &pipe_number);
+	t_list p_test = compile(tokens);
+	pipe_acces(&p_test);
 }

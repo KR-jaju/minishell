@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/31 21:18:38 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/07/30 13:24:42 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,10 @@ void	add_arg(t_process *process, char const *arg)
 	process->argc++;
 	process->argv[length] = str_clone(arg);
 }
-#include <stdio.h>
+
 //프로세스의 출력 파일을 설정, 실패 시 0, 성공 시 1 리턴
 int	set_output(t_process *process, char *filename, int append)
 {
-	printf("filename : %s\n", filename);
 	if (process->out_fd != STD_OUT)
 		if (close(process->out_fd))
 			return (process->bad_process = 1, 0);
@@ -90,8 +89,6 @@ int	set_input(t_process *process, char *filename)
 	if (process->in_fd != STD_IN)
 		if (close(process->in_fd))
 			return (process->bad_process = 1, 0);
-	printf("filename : %s\n", filename);
-	printf("DEBUG\n");
 	process->in_fd = open(filename, O_RDONLY | O_CREAT, 0644);
 	if (process->in_fd == -1)
 		return (process->bad_process = 1, 0);

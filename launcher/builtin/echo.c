@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:08:14 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 04:21:29 by jaeyojun         ###   ########.fr       */
+/*   Updated: 2023/07/30 20:01:59 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ void	echo_main(t_process *this)
 	while (this->argv[i] != (void *)0)
 	{
 		tmp = unquote_env(this->argv[i]);
-		write(this->out_fd, tmp, str_length(tmp));
+		write(1, tmp, str_length(tmp));
 		free(tmp);
 		if (i != this->argc - 1)
 			write(1, " ", 1);
 		i++;
 	}
 	if (!n_flag)
-		write(this->out_fd, "\n", 1);
+		write(1, "\n", 1);
 }
