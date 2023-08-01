@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:31:09 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 17:25:14 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	heredoc_unlink_tmp(void)
 	}
 }
 
-void	heredoc_count(t_list)
+//void	heredoc_count(t_list)
 
 //<<를 <로 치환, delimiter를 tmp파일로 치환
 void	heredoc_substitute(t_list *tokens)
