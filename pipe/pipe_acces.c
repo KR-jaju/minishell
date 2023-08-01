@@ -6,9 +6,13 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/01 17:16:51 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/01 17:31:24 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+
+
 
 #include "pipe.h"
 #include "../parser/tokenizer.h"
@@ -237,7 +241,6 @@ void	pipe_acces(t_list *p_test)
 
 	}
 }
-
 
 
 void	pipe_start(t_list *tokens)
