@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   panic.c                                            :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/28 17:20:47 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 20:25:58 by jaeyojun         ###   ########seoul.kr  */
+/*   Created: 2023/08/01 20:18:16 by jaeyojun          #+#    #+#             */
+/*   Updated: 2023/08/01 21:09:32 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stdio.h>
-#include <stdlib.h>
 
-
-//panic 바꾸기 
-void	panic(char *msg)
+void	panic_error(char *msg)
 {
 	printf("%s", msg);
-	exit(1);
 }
+

@@ -3,17 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 11:41:42 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 17:51:21 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define ERROR_EXIT	1
+# define SUCCES_EXIT 0
+
 # include <collection/list.h>
+
+
 
 //환경변수의 이름과 내용을 저장하는 구조체
 typedef struct s_envp

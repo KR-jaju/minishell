@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:08:14 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 21:03:17 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 21:37:39 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 #include "../../str/str.h"
 #include <unistd.h>
 #include <stdio.h>
-
 #include <stdlib.h>
-
+#include <shell/minishell.h>
 
 int	is_n_flag(char const *str)
 {
@@ -39,12 +38,12 @@ int	is_n_flag(char const *str)
 	return (0);
 }
 
-
-void	echo_main(t_process *this)
+int	echo_main(t_process *this)
 {
 	int		n_flag;
 	int		i;
 	char	*tmp;
+	int		fd;
 
 	i = 1;
 	if (this->argc >= 2)
@@ -54,12 +53,23 @@ void	echo_main(t_process *this)
 	while (this->argv[i] != (void *)0)
 	{
 		tmp = unquote_env(this->argv[i]);
-		write(1, tmp, str_length(tmp));
+		fd = write(1, tmp, str_length(tmp));
+		if (fd == -1)
+			return (perror("write"), ERROR_EXIT);
 		free(tmp);
 		if (i != this->argc - 1)
-			write(1, " ", 1);
+		{
+			fd = write(1, " ", 1);
+			if (fd == -1)
+				return (perror("write"), ERROR_EXIT);
+		}
 		i++;
 	}
 	if (!n_flag)
-		write(1, "\n", 1);
+	{
+		fd = write(1, "\n", 1);
+		if (fd == -1)
+			return (perror("write"), ERROR_EXIT);
+	}
+	return (SUCCES_EXIT);
 }

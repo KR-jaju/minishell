@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 01:39:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 12:06:55 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 21:01:44 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static int	export_set(t_process *this)
 	return (exit_code);
 }
 
-int	export_main(t_process *this)
+int	 export_main(t_process *this)
 {
 	if (this->argc == 1)
 		return (export_view());

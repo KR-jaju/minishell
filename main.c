@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 17:31:36 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/01 23:35:40 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <shell/minishell.h>
 #include <pipe/pipe.h>
 #include <parser/compiler.h>
+#include <signal/signal.h>
+
 
 void	visualize(t_list tokens)
 {
@@ -64,9 +66,12 @@ int	main(int argc, char **argv, char **envp)
 	t_list	tokens;
 
 	minishell_init(envp);
+	all_signal();
 	while (1)
 	{
+		
 		str = readline("minishell$ ");
+		signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
 			exit(111);
 		if (str_length(str) == 0)
@@ -82,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
+
 	}
 
 	return (0);
