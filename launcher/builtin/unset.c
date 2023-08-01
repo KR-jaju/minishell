@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 13:28:28 by jaju              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/08/01 12:19:19 by jaju             ###   ########.fr       */
-=======
-/*   Updated: 2023/08/01 21:15:28 by jaeyojun         ###   ########seoul.kr  */
->>>>>>> upstream/jaeyojun
+/*   Updated: 2023/08/02 01:10:23 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +24,7 @@ static int	syntax_var_name(char const *str)
 		while (str[i] != '\0')
 		{
 			if (!(str[i] == '_' || is_alphabet(str[i]) || is_number(str[i])))
-<<<<<<< HEAD
-				return (0);
-=======
 				return (SUCCES_EXIT);
->>>>>>> upstream/jaeyojun
 			i++;
 		}
 	}
@@ -52,9 +44,5 @@ int	unset_main(t_process *this)
 			remove_env(name);
 		i++;
 	}
-<<<<<<< HEAD
-	return (0);
-=======
 	return (SUCCES_EXIT);
->>>>>>> upstream/jaeyojun
 }
