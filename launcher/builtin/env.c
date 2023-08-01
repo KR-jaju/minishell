@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_util.c                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/30 04:00:45 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 11:59:12 by jaju             ###   ########.fr       */
+/*   Created: 2023/08/01 13:09:29 by jaju              #+#    #+#             */
+/*   Updated: 2023/08/01 13:12:29 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <str/str.h>
-#include <libft/libft.h>
+#include <parser/compiler.h>
+#include <shell/minishell.h>
+#include <stdio.h>
 
-char	*env_to_str(t_envp *env)
+int	env_main(t_process *this)
 {
-	int const	name_len = str_length(env->name);
-	int const	value_len = str_length(env->value);
-	char*const	new = allocate(name_len + value_len + 2);
-	char		*ptr;
+	t_list*const	env_list = &g_minishell.env_list;
+	t_envp			*env;
+	int				i;
 
-	ptr = new;
-	copy(env->name, ptr, name_len);
-	ptr += name_len;
-	copy("=", ptr, 1);
-	ptr += 1;
-	copy(env->value, ptr, value_len);
-	return (new);
+	(void)this;
+	i = 0;
+	while (i < env_list->length)
+	{
+		env = list_get(env_list, i);
+		if (env->value != (void *)0)
+			printf("%s=%s\n", env->name, env->value);
+		i++;
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:59:14 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 21:24:57 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 11:58:15 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,23 @@ void	*list_get(t_list const *this, int i)
 	if (i < 0 || i >= this->length)
 		return ((void *)0);
 	return (this->data[i]);
+}
+
+void	*list_remove(t_list *this, int idx)
+{
+	void*const	data = list_get(this, idx);
+	int			i;
+
+	if (idx < 0 || idx >= this->length)
+		panic("list_remove: Index out of bounds!");
+	i = idx;
+	while (i < this->length)
+	{
+		this->data[i] = this->data[i + 1];
+		i++;
+	}
+	this->length--;
+	return (data);
 }
 
 void	list_free(t_list *this)

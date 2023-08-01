@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 16:33:57 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 11:41:42 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char const	*get_env(char const *str);
 void		set_env(char const *name, char const *value);
 //환경변수 삭제 (실패하면 아무 일도 일어나지 않음)
 void		remove_env(char const *name);
-//리스트로 들고 있던 envp를 char **로 만들어 리턴
+//env_list를 char **로 만들어 리턴
 char		**get_envp(void);
 
 #endif

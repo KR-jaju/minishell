@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:18:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 12:39:46 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 12:09:39 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*str_substr(char const *str, int start, int end)
 	char		*copy;
 	int			i;
 
-	if (end <= start)
+	if (end < start)
 		return ((void *)0);
 	copy = allocate((end - start + 1) * sizeof(char));
 	i = start;
