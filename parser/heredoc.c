@@ -73,6 +73,8 @@ void	heredoc_unlink_tmp(void)
 	}
 }
 
+void	heredoc_count(t_list)
+
 //<<를 <로 치환, delimiter를 tmp파일로 치환
 void	heredoc_substitute(t_list *tokens)
 {
