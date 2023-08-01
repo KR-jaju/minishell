@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 21:03:29 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 21:11:56 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,53 @@
 #include <shell/minishell.h>
 
 
-void	check_behind(t_process *this)
+//에러가 나는 인수 출력
+static int	out_argv(char *argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (write(2, &argv[i], 1) == -1)
+		{
+			perror("write");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+//입력값 출력하고 ": " 출력하고 perror출력
+static int	print_argv(char	**argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		out_argv(argv[i]);
+		if (write(2, ": ", 2) == -1)
+		{
+			perror("write");
+			return (1);
+		}
+		i++;
+	}
+	perror("");
+	return (0);
+}
+
+int	check_behind(t_process *this)
 {
 	char		*path;
 	char		*tmp;
-	int 		fd; 
+	int			fd;
 
 	path = str_clone(this->argv[1]);
-	if (path[0] == '~' && (path[1] == '/' || path[1] == '\0')) //cd,
+	if (path[0] == '~' && (path[1] == '/' || \
+		path[1] == '\0'))
 	{
 		tmp = str_join("$HOME", path + 1);
 		free(path);
@@ -38,25 +77,40 @@ void	check_behind(t_process *this)
 	else
 		fd = chdir(tmp);
 	if (fd == 0)
-		printf("성공");
+		return (SUCCES_EXIT);
 	else
 	{
-		perror("bash ");
+		if (write(2, "bash: ", 6) == -1)
+			return (perror("write"), ERROR_EXIT);
+		if (print_argv(this->argv) == 1)
+			return (ERROR_EXIT);
+		return (ERROR_EXIT);
 	}
 }
 
-
-void	cd_main(t_process *this)
+//SUCCES_EXIT 0
+//ERROR_EXIT 1
+int	cd_main(t_process *this)
 {
 	char const	*path_envp;
 
 	if (this->argc == 1)
 	{
 		path_envp = get_env("HOME");
-		chdir(path_envp);
+		if (!path_envp)
+			return (ERROR_EXIT);
+		if (chdir(path_envp) == -1)
+		{
+			//perror결과값과 strerror결과값이 같음
+			if ((write(2, "bash: ", 6) == -1))
+				return (perror("write"), ERROR_EXIT);
+			if (print_argv(this->argv) == 1)
+				return (ERROR_EXIT);
+			// strerror(errno);
+			// printf("bash : %s", strerror(errno));
+		}
 	}
 	else if (this->argc >= 2)
-	{
-		check_behind(this);
-	}
+		return (check_behind(this));
+	return (SUCCES_EXIT);
 }

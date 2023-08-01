@@ -6,6 +6,8 @@ SRCS :=	main.c\
 		str/str.c\
 		collection/list.c\
 		pipe/pipe_acces.c pipe/pipe_error.c\
+		signal/signal.c\
+		launcher/error.c\
 		launcher/builtin/echo.c launcher/builtin/pwd.c launcher/builtin/exit.c launcher/builtin/cd.c launcher/builtin/export.c launcher/builtin/unset.c launcher/builtin/env.c
 
 OBJS := $(SRCS:%.c=%.o)

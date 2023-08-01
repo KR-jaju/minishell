@@ -6,13 +6,9 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/01 17:27:37 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 01:02:39 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
-
 
 #include "pipe.h"
 #include "../parser/tokenizer.h"
@@ -22,9 +18,9 @@
 #include <errno.h>
 #include <string.h>
 
-void	echo_main(t_process *this);
+int		echo_main(t_process *this);
 int 	pwd_main(t_process *this);
-void	cd_main(t_process *this);
+int		cd_main(t_process *this);
 int		export_main(t_process *this);
 int		execute(t_process *process);
 int		env_main(t_process *this);
@@ -111,28 +107,24 @@ int	is_builtin(char *name, int *idx)
 int	execute_builtins(int builtin_idx, t_process *tmp)
 {
 	if (builtin_idx == ECHO)
-		echo_main(tmp);
+		return (echo_main(tmp));
 	else if (builtin_idx == CD)
-		cd_main(tmp);
+		return (cd_main(tmp));
 	else if (builtin_idx == PWD)
-		pwd_main(tmp);
+		return (pwd_main(tmp));
 	else if (builtin_idx == EXPORT)
-	 	export_main(tmp);
+	 	return (export_main(tmp));
 	else if (builtin_idx == UNSET)
-		unset_main(tmp);
+		return (unset_main(tmp));
 	else if (builtin_idx == ENV)
-		env_main(tmp);
+		return (env_main(tmp));
 	else if (builtin_idx == EXIT)
-		exit_main(tmp);
+		return (exit_main(tmp));
 	return (0);
 }
 
 
-// void	pipe_execute(t_process *tmp, char const *path_split)
-// {
-// 	//printf("tmp->argc : %d\n", tmp->argc);
-// 	//printf("%s\n", path_split);
-// }
+
 
 int	execute(t_process *process)
 {
@@ -148,7 +140,10 @@ int	execute(t_process *process)
 	else
 	{
 		if (execve(path_split, process->argv, get_envp()) == -1)
-			printf("err: %s \n", strerror(errno));
+		{
+			printf("bash: %s: command not found\n", process->argv[0]);
+			exit(127);
+		}
 		return (1);
 	}
 }
@@ -166,13 +161,14 @@ void	pipe_acces(t_list *p_test)
 	int			pid;
 	int			prev_read_fd;
 	int			next[2] = {0, 1};
+	int			last_pid;
 
 	tmp = list_get(p_test, 0);
 	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx)) // fork 없이 빌트인 실행 조건
 	{
 		int stdout_copy = dup(1);
 		dup2(tmp->out_fd, 1);
-		execute_builtins(builtin_idx, tmp);
+		g_minishell.exit_code = execute_builtins(builtin_idx, tmp);
 		dup2(stdout_copy, 1);
 		close(stdout_copy);
 	}
@@ -191,6 +187,10 @@ void	pipe_acces(t_list *p_test)
 				next[1] = dup(1);
 			}
 			pid = fork(); // 자식 프로세스 생성
+			//
+			if (i == p_test->length - 1)
+				last_pid = pid;
+			//
 			if (pid == 0) // 자식 프로세스
 			{
 				if (tmp->in_fd == 0) // Input redirection이 없을 때는
@@ -213,6 +213,14 @@ void	pipe_acces(t_list *p_test)
 				close(prev_read_fd);// 이전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
 				close(next[1]);// 다음 파이프에 출력하는 것도 더이상 필요 없다.
 				prev_read_fd = next[0];
+
+				if (i == p_test->length - 1)
+				{
+					while (waitpid(last_pid, &g_minishell.exit_code, 0) > 0)
+						;
+					if (WIFEXITED(g_minishell.exit_code))
+						g_minishell.exit_code = WEXITSTATUS(g_minishell.exit_code);
+				}
 			}
 			i++;
 		}
@@ -221,7 +229,6 @@ void	pipe_acces(t_list *p_test)
 			;
 	}
 }
-
 
 
 void	pipe_start(t_list *tokens)
