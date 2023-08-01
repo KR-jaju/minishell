@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_acces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/31 21:36:55 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/01 15:50:00 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+
+
 
 #include "pipe.h"
 #include "../parser/tokenizer.h"
@@ -214,12 +218,4 @@ void	pipe_acces(t_list *p_test)
 	}
 	while (wait((void *)0) > 0)
 		;
-}
-
-
-
-void	pipe_start(t_list *tokens)
-{
-	t_list p_test = compile(tokens);
-	pipe_acces(&p_test);
 }
