@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 01:39:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:13:08 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 21:03:13 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ static int	syntax_var_name(char const *str)
 				return (0);
 			i++;
 		}
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 static int	parse_arg(char const *str, char **name, char **value)
@@ -92,7 +93,10 @@ static int	export_set(t_process *this)
 		if (parse_arg(parsed, &name, &value))
 			set_env(name, value);
 		else
+		{
+			printf("bash: export: `%s`: not a valid identifier\n", parsed);
 			exit_code = 1;
+		}
 		free(parsed);
 		free(name);
 		free(value);

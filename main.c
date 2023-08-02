@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 15:39:44 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 16:33:16 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,10 @@ void	set_terminal_print_on(void)
 	tcsetattr(1, 0, &term);  // 변경한 term 설정을 현재 터미널에 적용
 }
 
-void	do_sigterm(void)
+void	do_sigterm(int sin)
 // ctrl+d를 눌렀을때 작동
 {
+	(void) sin;
 	ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
 	ft_putstr_fd("\033[11C", 2); // 현재 커서의 위치를 12번째칸으로 이동
 	ft_putstr_fd("exit\n", 2); // exit를 출력
@@ -121,7 +122,7 @@ int	main(int argc, char **argv, char **envp)
 		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
 		{
-			do_sigterm();
+			do_sigterm(1);
 			//signal(SIGTERM, sigtermHandler);
 			//printf("\b\b  \b\b");
 			    //printf("\033[1A\033[K");
@@ -131,7 +132,6 @@ int	main(int argc, char **argv, char **envp)
 			
 		if (str_length(str) == 0)
 			continue ;
-
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
 			continue ; //ERROR!
@@ -152,9 +152,7 @@ int	main(int argc, char **argv, char **envp)
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
-
 	}
-	
 	set_terminal_print_on();
 	return (0);
 }

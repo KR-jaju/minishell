@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 15:52:12 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 16:19:42 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,14 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <stdlib.h>
+#include <shell/minishell.h>
 
+void	do_sigterm(int sin);
 void sighere_doc(int sign);
 void sigtermHandler(int sign);
 void	sigintHandler(int sign);
+
+void	ft_putstr_fd(char *tmp, int fd);
 
 //heredoc에 사용할 tmp파일의 이름
 static void	heredoc_filename(char *dst, int idx)
@@ -35,12 +39,21 @@ void	sigint_handler_nonl(int sig)
 {
 	//printf("\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	//rl_replace_line("", 0);
 	//printf("DED\n");
 	rl_redisplay();
-	printf("\n");
+	//printf("\n");
 	exit(1);
 	(void) sig;
+}
+
+void	heredo_sigterm(int sin)
+// ctrl+d를 눌렀을때 작동
+{
+	(void) sin;
+	ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
+	ft_putstr_fd("\033[2C", 2); // 현재 커서의 위치를 12번째칸으로 이동 // exit를 출력
+	exit(g_minishell.exit_code = 0);
 }
 
 //heredoc 입력을 받기 위한 프롬프트 열기
@@ -56,7 +69,10 @@ static void	heredoc_prompt(char const *filename, char const *end)
 	{
 		str = readline("> ");
 		if (str == (void *)0)
+		{
+			heredo_sigterm(1);
 			break ;
+		}
 		if (str_equals(str, parsed_delim))
 			break ;
 		write(fd, str, str_length(str));
@@ -143,6 +159,7 @@ int	heredoc_substitute(t_list *tokens)
 		if (WIFEXITED(exit_code))
 			exit_code = WEXITSTATUS(exit_code);
 		signal(SIGINT, sigintHandler);
+		//signal(SIGTERM, do_sigterm);
 	}
 	return (exit_code == 0);
 }

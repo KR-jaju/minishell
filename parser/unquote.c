@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unquote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 12:39:24 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 20:09:38 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,9 @@ char	*unquote_env(char const *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (*str == '\'')
+		if (str[i] == '\'')
 			i += unquote_single(str + i, &new);
-		else if (*str == '\"')
+		else if (str[i] == '\"')
 			i += unquote_double(str + i, &new);
 		else
 			i += unquote_normal(str + i, &new);

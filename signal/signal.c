@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 23:06:31 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 04:02:45 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 16:17:10 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	sigintHandler(int sign)
 	if (sign == SIGINT)
 	{	
 		printf("\n");
+		//printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -43,7 +44,7 @@ void	sigintHandler(int sign)
 void sigtermHandler(int sign)
 {
 	(void) sign;
-		//printf("\nCtrl+\\ (SIGQUIT) 시그널을 받았습니다.\n");
+	//printf("\nCtrl+\\ (SIGQUIT) 시그널을 받았습니다.\n");
 	printf("exit\n");
 	g_minishell.exit_code = 0;
 	

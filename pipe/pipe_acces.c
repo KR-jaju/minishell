@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 15:14:07 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 17:26:12 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@
 #include "../str/str.h"
 #include "../parser/compiler.h"
 #include <errno.h>
+#include <signal/signal.h>
+#include <readline/readline.h>
 #include <string.h>
 
+
+void	sigintHandler(int sign);
 int		echo_main(t_process *this);
 int 	pwd_main(t_process *this);
 int		cd_main(t_process *this);
@@ -52,6 +56,9 @@ char const	*envp_split(char const *envp_path, char *cmd)
 	int i = 0;
 	if (!envp_path || !cmd)
 		return (NULL);
+	fd = access(cmd, X_OK);
+	if (fd != -1)
+		return (cmd);
 	while (1)
 	{
 		if (i == 0)
@@ -144,7 +151,7 @@ int	execute(t_process *process)
 	else
 	{
 		//printf("DEBUG\n");
-		printf("pro->name  : %s\n", process->name);
+		//printf("pro->name  : %s\n", process->name);
 		if (execve(path_split, process->argv, get_envp()) == -1)
 		{
 			printf("bash: %s: command not found\n", process->argv[0]);
@@ -158,6 +165,23 @@ int	execute(t_process *process)
 
 // 프로세스가 1개이면 빌트인인지 확인
 //프로세스가 1개냐 아니냐로 분기
+
+void	pipex_sigintHandler(int sign)
+{
+	(void) sign;
+	//if (sign == SIGINT)
+	//{	
+		printf("^C\n");
+		//printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+
+		rl_redisplay();
+		//printf("\n");
+		g_minishell.exit_code = 1;
+	//}
+}
+
 #include <libft/libft.h>
 void	pipe_acces(t_list *p_test)
 {
@@ -168,6 +192,7 @@ void	pipe_acces(t_list *p_test)
 	int			prev_read_fd;
 	int			next[2] = {0, 1};
 	int			last_pid;
+	int		status;
 
 	tmp = list_get(p_test, 0);
 	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx)) // fork 없이 빌트인 실행 조건
@@ -192,6 +217,7 @@ void	pipe_acces(t_list *p_test)
 				next[0] = dup(0);// (닫을 수 있는) 표준 출력을 next fd에 넣는다.
 				next[1] = dup(1);
 			}
+
 			pid = fork(); // 자식 프로세스 생성
 			//
 			if (i == p_test->length - 1)
@@ -199,6 +225,8 @@ void	pipe_acces(t_list *p_test)
 			//
 			if (pid == 0) // 자식 프로세스
 			{
+				signal(SIGINT, SIG_DFL);
+				//signal(SIGINT, sigintHandler);
 				if (tmp->in_fd == 0) // Input redirection이 없을 때는
 					tmp->in_fd = prev_read_fd; // 그 자리를 이전 파이프에서 받는 fd로 채운다
 				else
@@ -212,27 +240,58 @@ void	pipe_acces(t_list *p_test)
 				close(tmp->out_fd);
 				close(tmp->in_fd); // in_fd와 out_fd는 닫아도 된다.
 				close(next[0]);// 남은 fd는 다음 파이프에서 받는 fd뿐
+				
 				execute(tmp);
 			}
 			else if (pid > 0)
 			{
+				signal(SIGINT, SIG_IGN);
 				close(prev_read_fd);// 이전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
 				close(next[1]);// 다음 파이프에 출력하는 것도 더이상 필요 없다.
 				prev_read_fd = next[0];
 
-				if (i == p_test->length - 1)
-				{
-					while (waitpid(last_pid, &g_minishell.exit_code, 0) > 0)
-						;
-					if (WIFEXITED(g_minishell.exit_code))
-						g_minishell.exit_code = WEXITSTATUS(g_minishell.exit_code);
-				}
+				//if (i == p_test->length - 1)
+				//{
+					// if (WIFSIGNALED(g_minishell.exit_code))
+					// {
+					// 	signal(SIGINT, pipex_sigintHandler);
+					// }
+					// if (WIFEXITED(g_minishell.exit_code))
+					// 	g_minishell.exit_code = WEXITSTATUS(g_minishell.exit_code);
+				//}
 			}
 			i++;
 		}
 		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
-		while (wait((void *)0) > 0)
-			;
+		
+		int s;
+		int signo;
+		i = 0;
+		s = waitpid(0, &status, 0);
+		while (s > 0)
+		{
+			if (WIFSIGNALED(status))
+			{
+				signo = WTERMSIG(status);
+				if (i == 0)
+				{
+					if (signo == SIGINT)
+						printf("^C\n");
+					else if (signo == SIGQUIT)
+						printf("^\\Quit: 3\n");
+					i = 1;
+				}
+				if (s == pid)
+					g_minishell.exit_code = 128 + signo;
+					//signal(SIGINT, pipex_sigintHandler);
+					//if (WIFEXITED(g_minishell.exit_code))
+						//g_minishell.exit_code = WEXITSTATUS(g_minishell.exit_code);
+			}
+			else if (s == pid)
+				g_minishell.exit_code = WEXITSTATUS(status);
+			s = waitpid(0, &status, 0);
+		}
+		
 	}
 }
 

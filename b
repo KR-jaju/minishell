@@ -1,2 +1,1 @@
-string p_test
-tsdfsdfsdfsdf
+$
