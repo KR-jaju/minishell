@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unquote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 01:24:54 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 12:36:40 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,102 +16,163 @@
 #include <stdlib.h>
 #include <shell/minishell.h>
 
-//문자열 str에 문자 c를 붙임
-static void	str_add_char(char **str, char c)
+static int	is_power_of_two(int x)
 {
-	int const	length = str_length(*str);
-	char		*new;
-
-	if (length % 64 == 0)
-	{
-		new = allocate((length + 64 + 1) * sizeof(char));
-		copy(*str, new, length);
-		free(*str);
-		*str = new;
-	}
-	(*str)[length] = c;
+	return ((x & (x - 1)) == 0);
 }
 
-//문자열 str에 문자열 a를 붙임
-static void	str_add(char **str, char const *a)
+//문자열 str에 문자 c를 붙임
+static void	str_push(char **str, char c)
+{
+	int const	len = str_length(*str);
+	char		*new;
+
+	if (is_power_of_two(len + 1))
+	{
+		new = allocate(len * 2);
+		copy(*str, new, len);
+		free(*str);
+		(*str) = new;
+	}
+	(*str)[len] = c;
+}
+
+//문자열 new에 주어진 문자열 str을 환경변수로 치환해 붙임
+static void	str_push_str(char **new, char const *str)
 {
 	int	i;
 
 	i = 0;
-	while (a[i] != '\0')
+	while (str[i] != '\0')
 	{
-		str_add_char(str, a[i]);
+		str_push(new, str[i]);
 		i++;
 	}
 }
 
-//문자열 new에 주어진 문자열 str을 환경변수로 치환해 붙임
-static void	str_add_env(char **new, char const **str)
+int	unquote_single(char const *src, char**dst)
 {
-	char	*substr;
-	char const	*env;
+	int	i;
+
+	i = 1;
+	while (src[i] != '\'')
+	{
+		str_push(dst, src[i]);
+		i++;
+	}
+	return (i + 1);
+}
+
+char	*int_to_str(int i)
+{
+	long long	abs;
+	char*const	new = allocate(11 * sizeof(char));
+	int			digit;
+
+	if (i == 0)
+		return (new[0] = '0', new);
+	abs = i;
+	if (abs < 0)
+	{
+		new[str_length(new)] = '-';
+		abs *= -1;
+	}
+	digit = 1;
+	while (i / digit >= 10)
+		digit *= 10;
+	while (digit >= 1)
+	{
+		new[str_length(new)] = (abs / digit) % 10;
+		digit /= 10;
+	}
+	return (new);
+}
+
+int	parse_var(char const *src, char **out)
+{
+	char	*name;
+	char	*value;
 	int		i;
 
-	i = 0;
-	(*str)++;
-	while (is_alphabet((*str)[i]) || is_number((*str)[i]) || (*str)[i] == '_')
-		i++;
-	substr = str_substr(*str, 0, i);
-	env = get_env(substr);
-	str_add(new, env);
-	free(substr);
-	*str += i - 1;
+	if (is_alphabet(src[1]) || src[1] == '_')
+	{
+		i = 1;
+		while (is_alphabet(src[i]) || is_number(src[i]) || src[i] == '_')
+			i++;
+		name = str_substr(src, 1, i);
+		value = str_clone(get_env(name));
+		return (free(name), (*out) = value, i + 1);
+	}
+	else if (src[1] == '?')
+		return ((*out) = int_to_str(g_minishell.exit_code), 2);
+	return ((*out) = (void *)0, 1);
 }
 
-//$?의 결과를 문자열 new에 붙임
-void	str_add_exit_code(char **new, char const **str)
+int	unquote_double(char const *src, char **dst)
 {
-	int const	exit_code = g_minishell.exit_code;
+	char	*value;
+	int		size;
+	int		i;
 
-	(*str)++;
-	if (exit_code / 100 % 10 != 0)
+	i = 1;
+	while (src[i] != '\"')
 	{
-		str_add_char(new, (exit_code / 100 % 10) + '0');
-		str_add_char(new, (exit_code / 10 % 10) + '0');
-		str_add_char(new, (exit_code % 10) + '0');
+		if (src[i] == '$')
+		{
+			size = parse_var(&src[i], &value);
+			if (size == 1)
+				str_push(dst, src[i]);
+			else
+				str_push_str(dst, value);
+			free(value);
+			i += size;
+		}
+		else
+		{
+			str_push(dst, src[i]);
+			i++;
+		}
 	}
-	else if (exit_code / 10 % 10 != 0)
-	{
-		str_add_char(new, (exit_code / 10 % 10) + '0');
-		str_add_char(new, (exit_code % 10) + '0');
-	}
-	else
-		str_add_char(new, (exit_code % 10) + '0');
+	return (i + 1);
 }
 
-//큰 따옴표(dq)의 특성대로 문자열 new에 붙임
-void	str_add_dq(char **new, char const **str)
+int	unquote_normal(char const *src, char **dst)
 {
-	if (**str == '$' && (is_alphabet((*str)[1]) || (*str)[1] == '_'))
-		str_add_env(new, str);
-	else if (**str == '$' && (*str)[1] == '?')
-		str_add_exit_code(new, str);
+	char	*value;
+	int		size;
+
+	if (src[0] == '$')
+	{
+		size = parse_var(&src[0], &value);
+		if (size == 1)
+			str_push(dst, src[0]);
+		else
+			str_push_str(dst, value);
+		return (free(value), size);
+	}
 	else
-		str_add_char(new, **str);
+	{
+		str_push(dst, src[0]);
+		return (1);
+	}
 }
 
 //작은 따옴표 ('')를 제외한 부분에서 환경변수 치환
 char	*unquote_env(char const *str)
 {
 	char	*new;
+	int		i;
 
-	new = allocate(1 * sizeof(char));
-	while (*str != '\0')
+	new = allocate(8 * sizeof(char));
+	i = 0;
+	while (str[i] != '\0')
 	{
 		if (*str == '\'')
-			while (*(++str) != '\'')
-				str_add_char(&new, *str);
+			i += unquote_single(str + i, &new);
 		else if (*str == '\"')
-			while (*(++str) != '\"')
-				str_add_dq(&new, &str);
+			i += unquote_double(str + i, &new);
 		else
-			str_add_dq(&new, &str);
-		str++;
+			i += unquote_normal(str + i, &new);
 	}
 	return (new);
 }
