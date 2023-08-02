@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:03:33 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 15:04:20 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,13 @@ void	heredoc_unlink_tmp(void)
 //void	heredoc_count(t_list)
 
 //<<를 <로 치환, delimiter를 tmp파일로 치환
-void	heredoc_substitute(t_list *tokens)
+int	heredoc_substitute(t_list *tokens)
 {
 	t_token	*token;
 	int		i;
 	int		heredoc_idx;
 	pid_t	pid;
-	//int		status;
+	int		exit_code;
 
 	i = 0;
 	heredoc_idx = 0;
@@ -121,16 +121,7 @@ void	heredoc_substitute(t_list *tokens)
 			{
 				if (heredoc_idx == 16)
 					panic("Too many heredoc");
-				//printf("token->type : %d\n", token->type);
-				//pid = fork();
-				
-				//if (pid == 0)
-				//{
-					heredoc_prompt(token, list_get(tokens, i++), heredoc_idx++);
-				//}
-				//else
-					//signal(SIGINT, SIG_IGN);
-				//waitpid(pid, &status, 0);
+				heredoc_prompt(token, list_get(tokens, i++), heredoc_idx++);
 			}
 		}
 		exit(0);
@@ -138,11 +129,12 @@ void	heredoc_substitute(t_list *tokens)
 	else
 	{
 		signal(SIGINT, SIG_IGN);
-		//wait(NULL);
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &exit_code, 0);
+		if (WIFEXITED(exit_code))
+			exit_code = WEXITSTATUS(exit_code);
+		signal(SIGINT, SIG_DFL);
 	}
-	// while (wait(NULL) > 0)
-	// 	;
+	return (exit_code == 0);
 }
 
 
