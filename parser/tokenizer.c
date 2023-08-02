@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:11:24 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 14:20:59 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	tokenize_non_symbol(char const **str, t_token *token)
 			while ((*str)[++i] != '\0' && (*str)[i] != '\"')
 				;
 		if ((*str)[i] == '\0')
-			return (printf("Quotation mark not closed"), 0); // EXIT_ERROR!!!!
+			return (printf("Syntax Error: quote not closed\n"), 0); // EXIT_ERROR!!!!
 		i++;
 	}
 	token->content = str_substr(*str, 0, i);
