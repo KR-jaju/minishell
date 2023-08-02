@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:31:09 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 13:51:46 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 
+void sighere_doc(int sign);
+void sigtermHandler(int sign);
+
 //heredoc에 사용할 tmp파일의 이름
 static char	*heredoc_filename(int idx)
 {
@@ -30,6 +33,16 @@ static char	*heredoc_filename(int idx)
 	return (name);
 }
 
+void	sigint_handler_nonl(int sig)
+{
+	rl_on_new_line();
+	//rl_replace_line("", 0);
+	//printf("DED\n");
+	rl_redisplay();
+	exit(1);
+	(void) sig;
+}
+
 //heredoc 입력을 받기 위한 프롬프트 열기
 static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 {
@@ -38,15 +51,23 @@ static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 	char*const	parsed_delim = unquote(delim->content);
 	char		*str;
 
+
 	if (fd == -1)
 		panic("Failed to create tmp file for heredoc");
 	while (1)
 	{
 		str = readline("> ");
+		//signal(SIGINT, sigtermHandler);
 		if (str == (void *)0)
+		{
+			//exit(1);
 			break ;
+		}
 		if (str_equals(str, parsed_delim))
+		{
+			//exit(1);
 			break ;
+		}
 		write(fd, str, str_length(str));
 		write(fd, "\n", 1);
 		free(str);
@@ -56,6 +77,8 @@ static void	heredoc_prompt(t_token *heredoc, t_token *delim, int idx)
 	heredoc->type = TK_IRD;
 	close(fd);
 }
+
+
 
 //heredoc 임시파일 삭제
 void	heredoc_unlink_tmp(void)
@@ -79,17 +102,50 @@ void	heredoc_substitute(t_list *tokens)
 	t_token	*token;
 	int		i;
 	int		heredoc_idx;
+	pid_t	pid;
+	//int		status;
 
 	i = 0;
 	heredoc_idx = 0;
-	while (i < tokens->length)
+	pid = fork();
+
+	if (pid == 0)
 	{
-		token = list_get(tokens, i++);
-		if (token->type == TK_HRD)
+		signal(SIGINT, sigint_handler_nonl);
+		while (i < tokens->length)
 		{
-			if (heredoc_idx == 16)
-				panic("Too many heredoc");
-			heredoc_prompt(token, list_get(tokens, i++), heredoc_idx++);
+			token = list_get(tokens, i++);
+			if (token->type == TK_HRD)
+			{
+				if (heredoc_idx == 16)
+					panic("Too many heredoc");
+				//printf("token->type : %d\n", token->type);
+				//pid = fork();
+				
+				//if (pid == 0)
+				//{
+					heredoc_prompt(token, list_get(tokens, i++), heredoc_idx++);
+				//}
+				//else
+					//signal(SIGINT, SIG_IGN);
+				//waitpid(pid, &status, 0);
+			}
 		}
+		exit(0);
 	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		//wait(NULL);
+		waitpid(pid, NULL, 0);
+	}
+	// while (wait(NULL) > 0)
+	// 	;
 }
+
+
+// 	if (pid == 0)
+// 		heredoc_child(mini);
+// 	waitpid(pid, &status, 0);
+// 	input(mini, ".heredoc.tmp");
+// }
