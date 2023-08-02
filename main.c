@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 15:08:38 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 15:39:44 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ int	main(int argc, char **argv, char **envp)
 			continue ; //ERROR!
 		if (!heredoc_substitute(&tokens))
 			continue ;
+		//t_token	*t0 = list_get(&tokens, 0);
+		//t_token	*t1 = list_get(&tokens, 1);
+		//printf("%s %s\n", t0->content, t1->content);
 		//if (tokens.name)
 		//waitpid(-1, &status, 0);
 		//status = WEXITSTATUS(status);
@@ -145,7 +148,7 @@ int	main(int argc, char **argv, char **envp)
 		//exit(0);
 		//visualize(tokens);
 		//exit(1);
-		printf("wad\n");
+		//printf("wad\n");
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);

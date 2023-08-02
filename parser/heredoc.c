@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 15:04:20 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 15:12:02 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 void sighere_doc(int sign);
 void sigtermHandler(int sign);
+void	sigintHandler(int sign);
 
 //heredoc에 사용할 tmp파일의 이름
 static char	*heredoc_filename(int idx)
@@ -35,10 +36,12 @@ static char	*heredoc_filename(int idx)
 
 void	sigint_handler_nonl(int sig)
 {
+	//printf("\n");
 	rl_on_new_line();
-	//rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	//printf("DED\n");
 	rl_redisplay();
+	printf("\n");
 	exit(1);
 	(void) sig;
 }
@@ -132,7 +135,7 @@ int	heredoc_substitute(t_list *tokens)
 		waitpid(pid, &exit_code, 0);
 		if (WIFEXITED(exit_code))
 			exit_code = WEXITSTATUS(exit_code);
-		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, sigintHandler);
 	}
 	return (exit_code == 0);
 }

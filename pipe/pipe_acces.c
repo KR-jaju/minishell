@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_acces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 14:12:33 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 15:14:07 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,8 @@ int	execute(t_process *process)
 	}
 	else
 	{
-		printf("DEBUG\n");
+		//printf("DEBUG\n");
+		printf("pro->name  : %s\n", process->name);
 		if (execve(path_split, process->argv, get_envp()) == -1)
 		{
 			printf("bash: %s: command not found\n", process->argv[0]);
