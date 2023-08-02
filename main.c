@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:12:44 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 14:27:57 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ int	main(int argc, char **argv, char **envp)
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
 			continue ; //ERROR!
-		heredoc_substitute(&tokens);
+		if (!heredoc_substitute(&tokens))
+			continue ;
 		//if (tokens.name)
 		//waitpid(-1, &status, 0);
 		//status = WEXITSTATUS(status);
