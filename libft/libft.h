@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 18:22:34 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 20:29:08 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 13:11:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ int		is_alphabet(char c);
 int		is_number(char c);
 //주어진 문자열을 출력하고 exit
 void	panic(char *msg);
+//int를 나타내는 string을 생성
 
 #endif
