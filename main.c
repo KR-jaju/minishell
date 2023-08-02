@@ -6,11 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/08/02 12:37:39 by jaju             ###   ########.fr       */
-=======
-/*   Updated: 2023/08/02 01:15:25 by jaju             ###   ########.fr       */
->>>>>>> fbdd5ea63fa6615f7d98236d3ceb98359e397d55
+/*   Updated: 2023/08/02 14:08:30 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +85,8 @@ int	main(int argc, char **argv, char **envp)
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
-<<<<<<< HEAD
-		tokenize_command(str);
-=======
 		if (!tokenize_command(str, &tokens))
 			continue ; //ERROR!
->>>>>>> fbdd5ea63fa6615f7d98236d3ceb98359e397d55
 		heredoc_substitute(&tokens);
 		//t_list p_test = compile(&tokens);
 		//(void) p_test;
