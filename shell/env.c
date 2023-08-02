@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 03:49:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 13:03:44 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 03:37:06 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,7 @@ void	remove_env(char const *name)
 	free(env->name);
 	free(env->value);
 	free(env);
-	while (i + 1 < env_list->length)
-	{
-		env_list->data[i] = env_list->data[i + 1];
-		i++;
-	}
-	env_list->length--;
+	list_remove(env_list, i);
 }
 
 char	**get_envp(void)

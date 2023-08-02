@@ -3,16 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_acces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/01 17:31:24 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 01:02:39 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
-
 
 #include "pipe.h"
 #include "../parser/tokenizer.h"
@@ -22,9 +18,9 @@
 #include <errno.h>
 #include <string.h>
 
-void	echo_main(t_process *this);
+int		echo_main(t_process *this);
 int 	pwd_main(t_process *this);
-void	cd_main(t_process *this);
+int		cd_main(t_process *this);
 int		export_main(t_process *this);
 int		execute(t_process *process);
 int		env_main(t_process *this);
@@ -111,28 +107,24 @@ int	is_builtin(char *name, int *idx)
 int	execute_builtins(int builtin_idx, t_process *tmp)
 {
 	if (builtin_idx == ECHO)
-		echo_main(tmp);
+		return (echo_main(tmp));
 	else if (builtin_idx == CD)
-		cd_main(tmp);
+		return (cd_main(tmp));
 	else if (builtin_idx == PWD)
-		pwd_main(tmp);
+		return (pwd_main(tmp));
 	else if (builtin_idx == EXPORT)
-	 	export_main(tmp);
+	 	return (export_main(tmp));
 	else if (builtin_idx == UNSET)
-		unset_main(tmp);
+		return (unset_main(tmp));
 	else if (builtin_idx == ENV)
-		env_main(tmp);
+		return (env_main(tmp));
 	else if (builtin_idx == EXIT)
-		exit_main(tmp);
+		return (exit_main(tmp));
 	return (0);
 }
 
 
-// void	pipe_execute(t_process *tmp, char const *path_split)
-// {
-// 	//printf("tmp->argc : %d\n", tmp->argc);
-// 	//printf("%s\n", path_split);
-// }
+
 
 int	execute(t_process *process)
 {
@@ -151,7 +143,6 @@ int	execute(t_process *process)
 		{
 			printf("bash: %s: command not found\n", process->argv[0]);
 			exit(127);
-			//printf("err: %s \n", strerror(errno));
 		}
 		return (1);
 	}
@@ -170,16 +161,14 @@ void	pipe_acces(t_list *p_test)
 	int			pid;
 	int			prev_read_fd;
 	int			next[2] = {0, 1};
-	//
 	int			last_pid;
-	//
 
 	tmp = list_get(p_test, 0);
 	if (p_test->length == 1 && is_builtin(tmp->name, &builtin_idx)) // fork 없이 빌트인 실행 조건
 	{
 		int stdout_copy = dup(1);
 		dup2(tmp->out_fd, 1);
-		execute_builtins(builtin_idx, tmp);
+		g_minishell.exit_code = execute_builtins(builtin_idx, tmp);
 		dup2(stdout_copy, 1);
 		close(stdout_copy);
 	}
@@ -238,7 +227,6 @@ void	pipe_acces(t_list *p_test)
 		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
 		while (wait((void *)0) > 0)
 			;
-
 	}
 }
 

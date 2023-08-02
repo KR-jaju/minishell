@@ -6,7 +6,11 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:31:39 by jaju              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/08/02 12:37:22 by jaju             ###   ########.fr       */
+=======
+/*   Updated: 2023/08/02 03:54:41 by jaju             ###   ########.fr       */
+>>>>>>> fbdd5ea63fa6615f7d98236d3ceb98359e397d55
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +39,6 @@ typedef struct s_token
 }t_token;
 
 //주어진 문자열을 토근 단위로 나눠 저장한 리스트를 리턴하는 함수
-int	tokenize(char const *s, t_token **token);
+int	tokenize_command(char const *str, t_list *list);
 
 #endif

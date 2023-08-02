@@ -6,7 +6,11 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/08/02 12:37:39 by jaju             ###   ########.fr       */
+=======
+/*   Updated: 2023/08/02 01:15:25 by jaju             ###   ########.fr       */
+>>>>>>> fbdd5ea63fa6615f7d98236d3ceb98359e397d55
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +26,10 @@
 #include <shell/minishell.h>
 #include <pipe/pipe.h>
 #include <parser/compiler.h>
+#include <signal/signal.h>
+
+
+void sigtermHandler(int sign);
 
 void	visualize(t_list tokens)
 {
@@ -64,15 +72,29 @@ int	main(int argc, char **argv, char **envp)
 	t_list	tokens;
 
 	minishell_init(envp);
+	//all_signal();
 	while (1)
 	{
+		all_signal();
 		str = readline("minishell$ ");
+		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
-			exit(111);
+		{
+			//signal(SIGTERM, sigtermHandler);
+			printf("\b\b  \b\b");
+			printf("exit\n");
+			exit(g_minishell.exit_code = 0);
+		}
+			
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
+<<<<<<< HEAD
 		tokenize_command(str);
+=======
+		if (!tokenize_command(str, &tokens))
+			continue ; //ERROR!
+>>>>>>> fbdd5ea63fa6615f7d98236d3ceb98359e397d55
 		heredoc_substitute(&tokens);
 		//t_list p_test = compile(&tokens);
 		//(void) p_test;
@@ -82,6 +104,7 @@ int	main(int argc, char **argv, char **envp)
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
+
 	}
 
 	return (0);
