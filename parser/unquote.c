@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 03:42:30 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 12:39:24 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ int	parse_var(char const *src, char **out)
 	return ((*out) = (void *)0, 1);
 }
 
-//큰 따옴표 안의 내용을 파싱
 int	unquote_double(char const *src, char **dst)
 {
 	char	*value;
