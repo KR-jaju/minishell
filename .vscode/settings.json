@@ -12,6 +12,7 @@
 		"string": "c",
 		"string_view": "c",
 		"vector": "c",
+<<<<<<< HEAD
 		"type_traits": "c",
 		"utility": "c",
 		"memory_resource": "c",
@@ -31,5 +32,15 @@
 		"system_error": "c",
 		"tuple": "c",
 		"libft.h": "c"
+=======
+		"__config": "c",
+		"__hash_table": "c",
+		"__locale": "c",
+		"functional": "c",
+		"ios": "c",
+		"iterator": "c",
+		"locale": "c",
+		"type_traits": "c"
+>>>>>>> upstream/main
 	}
 }

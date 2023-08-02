@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 23:06:31 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 00:58:13 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 04:02:45 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ void sigtermHandler(int sign)
 	printf("exit\n");
 	g_minishell.exit_code = 0;
 	
+}
+
+void sighere_doc(int sign)
+{
+	printf("DEBUIG\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	(void) sign;
+	exit(1);
+	//g_minishell.exit_code = 0;
 }
 
 void	all_signal(void)

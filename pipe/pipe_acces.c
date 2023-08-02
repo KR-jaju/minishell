@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 01:02:39 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 14:12:33 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int	is_builtin(char *name, int *idx)
 	};
 	int			i;
 
+	if (name == (void *)0)
+		return (0);
 	i = 0;
 	while (i < 7)
 	{
@@ -132,6 +134,8 @@ int	execute(t_process *process)
 	int			builtin_idx;
 	char const	*path_split;
 
+	if (process->name == (void *)0)
+		exit(0);
 	path_split = envp_split(path_envp, process->name);
 	if (is_builtin(process->name, &builtin_idx))
 	{
@@ -139,6 +143,7 @@ int	execute(t_process *process)
 	}
 	else
 	{
+		printf("DEBUG\n");
 		if (execve(path_split, process->argv, get_envp()) == -1)
 		{
 			printf("bash: %s: command not found\n", process->argv[0]);

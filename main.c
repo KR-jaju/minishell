@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:08:30 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/02 14:12:44 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <pipe/pipe.h>
 #include <parser/compiler.h>
 #include <signal/signal.h>
-
+#include <termios.h>
 
 void sigtermHandler(int sign);
 
@@ -59,45 +59,98 @@ void	visualize(t_list tokens)
 	}
 }
 
+void	ft_putstr_fd(char *tmp, int fd)
+{
+	int i = 0;
+	
+	while (tmp[i])
+	{
+		write(fd, &tmp[i], 1);
+		i++;
+	}
+}
+
+
+void	set_terminal_print_off(void)
+// 터미널에 ^C, ^\등의 시그널표식을 출력하지않도록 설정
+{
+	struct termios	term; // 터미널 설정이 담겨있는 termios 구조체
+
+	tcgetattr(1, &term); // 현재 터미널의 설정을 term에 가져옴
+	term.c_lflag &= ~(ECHOCTL); // 시그널표식 출력이 true 라면 false로 변경
+	tcsetattr(1, 0, &term); // 변경한 term 설정을 현재 터미널에 적용
+}
+
+void	set_terminal_print_on(void)
+// 터미널에 ^C, ^\등의 시그널표식을 출력하도록 설정
+{
+	struct termios	term; // 터미널 설정이 담겨있는 termios 구조체
+
+	tcgetattr(1, &term); // 현재 터미널의 설정을 term에 가져옴
+	term.c_lflag |= (ECHOCTL); // 시그널표식 출력이 false 라면 true로 변경
+	tcsetattr(1, 0, &term);  // 변경한 term 설정을 현재 터미널에 적용
+}
+
+void	do_sigterm(void)
+// ctrl+d를 눌렀을때 작동
+{
+	ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
+	ft_putstr_fd("\033[11C", 2); // 현재 커서의 위치를 12번째칸으로 이동
+	ft_putstr_fd("exit\n", 2); // exit를 출력
+	exit(g_minishell.exit_code = 0);
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void) argc;
 	(void) argv;
 	(void) envp;
 	char	*str;
+	//int		status;
 	t_list	tokens;
+	//int		heredoc_check;
 
 	minishell_init(envp);
-	//all_signal();
+	set_terminal_print_off();
+	all_signal();
 	while (1)
 	{
-		all_signal();
+		
 		str = readline("minishell$ ");
 		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
 		{
+			do_sigterm();
 			//signal(SIGTERM, sigtermHandler);
-			printf("\b\b  \b\b");
-			printf("exit\n");
-			exit(g_minishell.exit_code = 0);
+			//printf("\b\b  \b\b");
+			    //printf("\033[1A\033[K");
+			// printf("exit\n");
+			// exit(g_minishell.exit_code = 0);
 		}
 			
 		if (str_length(str) == 0)
 			continue ;
+
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
 			continue ; //ERROR!
 		heredoc_substitute(&tokens);
+		//if (tokens.name)
+		//waitpid(-1, &status, 0);
+		//status = WEXITSTATUS(status);
 		//t_list p_test = compile(&tokens);
 		//(void) p_test;
 		//exit(0);
 		//visualize(tokens);
 		//exit(1);
+		printf("wad\n");
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
 
 	}
-
+	
+	set_terminal_print_on();
 	return (0);
 }
