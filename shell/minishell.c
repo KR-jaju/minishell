@@ -1,21 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/23 17:57:55 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 03:49:56 by jaju             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 #include "str/str.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "libft/libft.h"
-
 //미니쉘(전역변수) 초기화
 void	minishell_init(char **envp)
 {
@@ -37,3 +25,4 @@ void	minishell_init(char **envp)
 	}
 	g_minishell.env_list = env;
 }
+
