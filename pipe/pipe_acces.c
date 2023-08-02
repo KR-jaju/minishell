@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 13:53:35 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 14:03:25 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,6 @@ void	pipe_acces(t_list *p_test)
 		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
 		while (wait((void *)0) > 0)
 			;
-
 	}
 }
 
