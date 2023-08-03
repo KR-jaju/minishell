@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 16:33:16 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/03 17:12:11 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 #include <parser/compiler.h>
 #include <signal/signal.h>
 #include <termios.h>
-
-void sigtermHandler(int sign);
+#include <launcher/error.h>
 
 void	visualize(t_list tokens)
 {
@@ -59,18 +58,6 @@ void	visualize(t_list tokens)
 	}
 }
 
-void	ft_putstr_fd(char *tmp, int fd)
-{
-	int i = 0;
-	
-	while (tmp[i])
-	{
-		write(fd, &tmp[i], 1);
-		i++;
-	}
-}
-
-
 void	set_terminal_print_off(void)
 // 터미널에 ^C, ^\등의 시그널표식을 출력하지않도록 설정
 {
@@ -91,64 +78,29 @@ void	set_terminal_print_on(void)
 	tcsetattr(1, 0, &term);  // 변경한 term 설정을 현재 터미널에 적용
 }
 
-void	do_sigterm(int sin)
-// ctrl+d를 눌렀을때 작동
-{
-	(void) sin;
-	ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
-	ft_putstr_fd("\033[11C", 2); // 현재 커서의 위치를 12번째칸으로 이동
-	ft_putstr_fd("exit\n", 2); // exit를 출력
-	exit(g_minishell.exit_code = 0);
-}
-
 
 int	main(int argc, char **argv, char **envp)
 {
-	(void) argc;
-	(void) argv;
-	(void) envp;
 	char	*str;
-	//int		status;
 	t_list	tokens;
-	//int		heredoc_check;
 
+	(void )	argc;
+	(void )	argv;
 	minishell_init(envp);
 	set_terminal_print_off();
 	all_signal();
 	while (1)
 	{
-		
 		str = readline("minishell$ ");
-		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
-		{
-			do_sigterm(1);
-			//signal(SIGTERM, sigtermHandler);
-			//printf("\b\b  \b\b");
-			    //printf("\033[1A\033[K");
-			// printf("exit\n");
-			// exit(g_minishell.exit_code = 0);
-		}
-			
+			main_sigterm_handler();
 		if (str_length(str) == 0)
 			continue ;
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
-			continue ; //ERROR!
+			continue ;
 		if (!heredoc_substitute(&tokens))
 			continue ;
-		//t_token	*t0 = list_get(&tokens, 0);
-		//t_token	*t1 = list_get(&tokens, 1);
-		//printf("%s %s\n", t0->content, t1->content);
-		//if (tokens.name)
-		//waitpid(-1, &status, 0);
-		//status = WEXITSTATUS(status);
-		//t_list p_test = compile(&tokens);
-		//(void) p_test;
-		//exit(0);
-		//visualize(tokens);
-		//exit(1);
-		//printf("wad\n");
 		pipe_start(&tokens);
 		heredoc_unlink_tmp();
 		free(str);

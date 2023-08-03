@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 03:54:10 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/03 16:52:23 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <shell/minishell.h>
-
 
 //에러가 나는 인수 출력
 static int	out_argv(char *argv)
@@ -106,8 +105,6 @@ int	cd_main(t_process *this)
 				return (perror("write"), ERROR_EXIT);
 			if (print_argv(this->argv) == 1)
 				return (ERROR_EXIT);
-			// strerror(errno);
-			// printf("bash : %s", strerror(errno));
 		}
 	}
 	else if (this->argc >= 2)
