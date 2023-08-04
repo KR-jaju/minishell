@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 18:06:58 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 18:32:21 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	process_free(void *this)
 	int				i;
 
 	i = 0;
-	while (process->argv[i] == (void *)0)
+	while (process->argv[i] != (void *)0)
 	{
 		free(process->argv[i]);
 		i++;

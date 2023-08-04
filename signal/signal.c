@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 23:06:31 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/03 17:12:05 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/04 20:44:07 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@
 void	main_sigint_handler_heredoc(int sig)
 {
 	(void) sig;
+
 	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
+	printf("\n");
 	exit(1);
 }
 
@@ -29,8 +32,16 @@ void	main_sigint_handler_heredoc(int sig)
 void	sigterm_handler_heredoc(int sin)
 {
 	(void) sin;
-	ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
-	ft_putstr_fd("\033[2C", 2); // 현재 커서의 위치를 2번째칸으로 이동 // exit를 출력
+	
+	write(2, "\033[1A", 4);
+	write(2, "\033[2C", 4);
+	//printf("\r");
+	// rl_on_new_line();
+	//rl_replace_line("", 0);
+	// rl_redisplay();
+	//write(2, "\033[1A", 4);
+	//ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
+	//ft_putstr_fd("\033[2C", 2); // 현재 커서의 위치를 2번째칸으로 이동 // exit를 출력
 	exit(g_minishell.exit_code = 0);
 }
 

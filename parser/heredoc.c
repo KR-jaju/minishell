@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/03 17:11:48 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/04 20:52:33 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ static void	heredoc_prompt(char const *filename, char const *end)
 		str = readline("> ");
 		if (str == (void *)0)
 		{
+			//free(str);
+			//printf("\r");
+			//printf("DENBUG");
+			//exit(g_minishell.exit_code = 0);
 			sigterm_handler_heredoc(1);
 			break ;
 		}
