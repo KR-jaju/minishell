@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_acces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:10:12 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/02 15:14:07 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 17:15:15 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ void	pipe_acces(t_list *p_test)
 	}
 	else // 그 외 일반적인 경우
 	{	
+		signal(SIGINT, SIG_IGN);
 		i = 0;
 		prev_read_fd = dup(0);
 		while (i < p_test->length)
@@ -199,6 +200,7 @@ void	pipe_acces(t_list *p_test)
 			//
 			if (pid == 0) // 자식 프로세스
 			{
+				signal(SIGINT, SIG_DFL);
 				if (tmp->in_fd == 0) // Input redirection이 없을 때는
 					tmp->in_fd = prev_read_fd; // 그 자리를 이전 파이프에서 받는 fd로 채운다
 				else
@@ -219,20 +221,13 @@ void	pipe_acces(t_list *p_test)
 				close(prev_read_fd);// 이전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
 				close(next[1]);// 다음 파이프에 출력하는 것도 더이상 필요 없다.
 				prev_read_fd = next[0];
-
-				if (i == p_test->length - 1)
-				{
-					while (waitpid(last_pid, &g_minishell.exit_code, 0) > 0)
-						;
-					if (WIFEXITED(g_minishell.exit_code))
-						g_minishell.exit_code = WEXITSTATUS(g_minishell.exit_code);
-				}
 			}
 			i++;
 		}
 		close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd
 		while (wait((void *)0) > 0)
 			;
+		signal(SIGINT, SIG_IGN);
 	}
 }
 

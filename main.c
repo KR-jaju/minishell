@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 15:39:44 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/02 17:14:33 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,11 @@ void	set_terminal_print_on(void)
 	tcsetattr(1, 0, &term);  // 변경한 term 설정을 현재 터미널에 적용
 }
 
-void	do_sigterm(void)
-// ctrl+d를 눌렀을때 작동
+void	minishell_exit(void)
 {
-	ft_putstr_fd("\033[1A", 2); // 현재 커서의 위치를 한칸 위로 올려줌 
-	ft_putstr_fd("\033[11C", 2); // 현재 커서의 위치를 12번째칸으로 이동
-	ft_putstr_fd("exit\n", 2); // exit를 출력
+	write(2, "\033[1A", 4);// 현재 커서의 위치를 한칸 위로 올려줌 
+	write(2, "\033[11C", 5); // 현재 커서의 위치를 12번째칸으로 이동
+	write(2, "exit\n", 5); // exit를 출력
 	exit(g_minishell.exit_code = 0);
 }
 
@@ -120,15 +119,7 @@ int	main(int argc, char **argv, char **envp)
 		str = readline("minishell$ ");
 		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
-		{
-			do_sigterm();
-			//signal(SIGTERM, sigtermHandler);
-			//printf("\b\b  \b\b");
-			    //printf("\033[1A\033[K");
-			// printf("exit\n");
-			// exit(g_minishell.exit_code = 0);
-		}
-			
+			minishell_exit();
 		if (str_length(str) == 0)
 			continue ;
 
