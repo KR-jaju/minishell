@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   pipe_execute.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/29 22:25:57 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 21:09:23 by jaeyojun         ###   ########seoul.kr  */
+/*   Created: 2023/08/03 21:59:04 by jaeyojun          #+#    #+#             */
+/*   Updated: 2023/08/04 17:00:39 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parser/compiler.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <limits.h>
-#include <libft/libft.h>
-#include <str/str.h>
+#include "pipe.h"
 #include <shell/minishell.h>
 
-void	panic_error(char *msg);
-
-int	pwd_main(t_process *this)
+void	process_run(t_list *tokens)
 {
-	char	pwd[PATH_MAX];
+	t_list		p_test;
+	t_process	*tmp;
+	int			pid;
+	int			builtin_idx;
 
-	if (this->argc != 1)
+	p_test = compile(tokens);
+	tmp = list_get(&p_test, 0);
+	if (p_test.length == 1 && check_builtin(tmp->name, &builtin_idx)) // fork 없이 빌트인 실행 조건
+		execute_no_fork(tmp, builtin_idx);
+	else // 그 외 일반적인 경우
 	{
-		printf("pwd: too many arguments");
-		return (ERROR_EXIT);
+		pid = execute_fork(&p_test);
+		wait_process(pid);
 	}
-	if (getcwd(pwd, PATH_MAX) != (void *)0)
-		printf("%s\n", pwd);
-	return (SUCCES_EXIT);
 }

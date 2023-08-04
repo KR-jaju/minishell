@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_error.c                                       :+:      :+:    :+:   */
+/*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/30 16:54:31 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/07/30 17:08:57 by jaeyojun         ###   ########seoul.kr  */
+/*   Created: 2023/08/03 16:47:06 by jaeyojun          #+#    #+#             */
+/*   Updated: 2023/08/03 19:58:02 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "../str/str.h"
+#ifndef ERROR_H
+# define ERROR_H
 
-void	execute_error(char *tmp, char *name)
-{
-	int i; 
+# include <unistd.h>
+# include <stdlib.h>
+# include "../str/str.h"
 
-	write(2, "bash : ", 7);
-	write(2, name, str_length(name));
-	write(2, ": ", 2);
-	//printf("%s: ", name);
-	i = 0;
-	while (tmp[i])
-	{
-		write(2, &tmp[i], 1);
-		i++;
-	}
-	exit(127);
-}
+int		error_open(void);
+void	error_close(int backup);
+void	ft_putstr_fd(char *tmp, int fd);
+
+#endif

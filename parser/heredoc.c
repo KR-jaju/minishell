@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 15:52:12 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/03 17:11:48 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <stdlib.h>
+#include <shell/minishell.h>
+#include <launcher/error.h>
 
-void sighere_doc(int sign);
-void sigtermHandler(int sign);
-void	sigintHandler(int sign);
+//signal 함수
+void	main_sigint_handler(int sign);
+void	main_sigint_handler_heredoc(int sig);
+void	sigterm_handler_heredoc(int sin);
 
 //heredoc에 사용할 tmp파일의 이름
 static void	heredoc_filename(char *dst, int idx)
@@ -29,18 +32,6 @@ static void	heredoc_filename(char *dst, int idx)
 	copy("_NN.tmp", dst, 8);
 	dst[1] = (idx / 10) + '0';
 	dst[2] = (idx % 10) + '0';
-}
-
-void	sigint_handler_nonl(int sig)
-{
-	//printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	//printf("DED\n");
-	rl_redisplay();
-	printf("\n");
-	exit(1);
-	(void) sig;
 }
 
 //heredoc 입력을 받기 위한 프롬프트 열기
@@ -56,7 +47,10 @@ static void	heredoc_prompt(char const *filename, char const *end)
 	{
 		str = readline("> ");
 		if (str == (void *)0)
+		{
+			sigterm_handler_heredoc(1);
 			break ;
+		}
 		if (str_equals(str, parsed_delim))
 			break ;
 		write(fd, str, str_length(str));
@@ -66,8 +60,6 @@ static void	heredoc_prompt(char const *filename, char const *end)
 	free(parsed_delim);
 	close(fd);
 }
-
-
 
 //heredoc 임시파일 삭제
 void	heredoc_unlink_tmp(void)
@@ -117,16 +109,16 @@ int	heredoc_substitute(t_list *tokens)
 	int		exit_code;
 	char	*end_list[17];
 	char	filename[20];
+	int		i;
 
-	for (int i = 0; i < 17; i++)
-	{
+	i = -1;
+	while (++i < 17)
 		end_list[i] = (void *)0;
-	}
 	heredoc_replace(tokens, end_list);
 	pid = fork();
 	if (pid == 0)
 	{
-		signal(SIGINT, sigint_handler_nonl);
+		signal(SIGINT, main_sigint_handler_heredoc);
 		heredoc_idx = 0;
 		while (end_list[heredoc_idx] != (void *)0)
 		{
@@ -142,14 +134,7 @@ int	heredoc_substitute(t_list *tokens)
 		waitpid(pid, &exit_code, 0);
 		if (WIFEXITED(exit_code))
 			exit_code = WEXITSTATUS(exit_code);
-		signal(SIGINT, sigintHandler);
+		signal(SIGINT, main_sigint_handler);
 	}
 	return (exit_code == 0);
 }
-
-
-// 	if (pid == 0)
-// 		heredoc_child(mini);
-// 	waitpid(pid, &status, 0);
-// 	input(mini, ".heredoc.tmp");
-// }

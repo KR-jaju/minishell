@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 17:14:33 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 17:14:35 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 #include <parser/compiler.h>
 #include <signal/signal.h>
 #include <termios.h>
-
-void sigtermHandler(int sign);
+#include <launcher/error.h>
 
 void	visualize(t_list tokens)
 {
@@ -59,18 +58,6 @@ void	visualize(t_list tokens)
 	}
 }
 
-void	ft_putstr_fd(char *tmp, int fd)
-{
-	int i = 0;
-	
-	while (tmp[i])
-	{
-		write(fd, &tmp[i], 1);
-		i++;
-	}
-}
-
-
 void	set_terminal_print_off(void)
 // 터미널에 ^C, ^\등의 시그널표식을 출력하지않도록 설정
 {
@@ -102,50 +89,31 @@ void	minishell_exit(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	(void) argc;
-	(void) argv;
-	(void) envp;
 	char	*str;
-	//int		status;
 	t_list	tokens;
-	//int		heredoc_check;
 
+	(void )	argc;
+	(void )	argv;
 	minishell_init(envp);
 	set_terminal_print_off();
 	all_signal();
 	while (1)
 	{
-		
 		str = readline("minishell$ ");
-		//signal(SIGINT, sigintHandler);
 		if (str == (void *)0)
 			minishell_exit();
 		if (str_length(str) == 0)
 			continue ;
-
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
-			continue ; //ERROR!
+			continue ;
 		if (!heredoc_substitute(&tokens))
 			continue ;
-		//t_token	*t0 = list_get(&tokens, 0);
-		//t_token	*t1 = list_get(&tokens, 1);
-		//printf("%s %s\n", t0->content, t1->content);
-		//if (tokens.name)
-		//waitpid(-1, &status, 0);
-		//status = WEXITSTATUS(status);
-		//t_list p_test = compile(&tokens);
-		//(void) p_test;
-		//exit(0);
-		//visualize(tokens);
-		//exit(1);
-		//printf("wad\n");
-		pipe_start(&tokens);
+		//printf("awed\n");
+		process_run(&tokens);
 		heredoc_unlink_tmp();
 		free(str);
-
 	}
-	
 	set_terminal_print_on();
 	return (0);
 }
