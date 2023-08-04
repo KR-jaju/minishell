@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 13:24:42 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/04 18:06:58 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,21 @@ void	process_init(t_process *process)
 	process->name = (void *)0;
 	process->argc = 0;
 	process->argv = allocate(1 * sizeof(char *));
+}
+
+void	process_free(void *this)
+{
+	t_process*const	process = this;
+	int				i;
+
+	i = 0;
+	while (process->argv[i] == (void *)0)
+	{
+		free(process->argv[i]);
+		i++;
+	}
+	free(process->argv);
+	free(process->name);
 }
 
 //프로세스의 이름 설정

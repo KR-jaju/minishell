@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:20:59 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/04 18:17:21 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,11 @@ int	tokenize_command(char const *str, t_list *list)
 			return (0);
 	}
 	return (1);
+}
+
+void	token_free(void *token)
+{
+	t_token*const	this = token;
+
+	free(this->content);
 }
