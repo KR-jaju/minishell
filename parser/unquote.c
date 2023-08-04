@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 20:09:38 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/04 15:52:26 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*int_to_str(int i)
 		digit *= 10;
 	while (digit >= 1)
 	{
-		new[str_length(new)] = (abs / digit) % 10;
+		new[str_length(new)] = (abs / digit) % 10 + '0';
 		digit /= 10;
 	}
 	return (new);

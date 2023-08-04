@@ -5,7 +5,7 @@ SRCS :=	main.c\
 		libft/allocate.c libft/copy.c libft/is_number.c libft/is_alphabet.c\
 		str/str.c\
 		collection/list.c\
-		pipe/pipe_acces.c pipe/pipe_builtins.c pipe/pipe_envp.c pipe/pipe_execute.c\
+		pipe/execute_util.c pipe/execute.c pipe/pipe_envp.c pipe/pipe_execute.c\
 		signal/signal.c\
 		launcher/error.c\
 		launcher/builtin/echo.c launcher/builtin/pwd.c launcher/builtin/exit.c launcher/builtin/cd.c launcher/builtin/export.c launcher/builtin/unset.c launcher/builtin/env.c
