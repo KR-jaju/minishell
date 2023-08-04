@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:48:33 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/30 16:56:24 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 18:07:42 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ typedef struct s_process
 
 //파이프라인 (|) 단위로 프로세스를 만들어 리스트에 넣고 리턴
 t_list	compile(t_list const *tokens);
+void	process_free(void *this);
 
 #endif

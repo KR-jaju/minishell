@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 17:14:35 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 17:58:57 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,14 @@ void	minishell_exit(void)
 	write(2, "\033[1A", 4);// 현재 커서의 위치를 한칸 위로 올려줌 
 	write(2, "\033[11C", 5); // 현재 커서의 위치를 12번째칸으로 이동
 	write(2, "exit\n", 5); // exit를 출력
+	set_terminal_print_on();
 	exit(g_minishell.exit_code = 0);
 }
 
+void	leaks(void)
+{
+	system("leaks minishell");
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -97,6 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	minishell_init(envp);
 	set_terminal_print_off();
 	all_signal();
+	atexit(leaks);
 	while (1)
 	{
 		str = readline("minishell$ ");
@@ -114,6 +120,5 @@ int	main(int argc, char **argv, char **envp)
 		heredoc_unlink_tmp();
 		free(str);
 	}
-	set_terminal_print_on();
 	return (0);
 }

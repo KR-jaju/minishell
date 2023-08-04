@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:21:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/01 11:57:03 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 18:03:29 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*list_remove(t_list *this, int i);
 //리스트 해제, 내용물은 해제하지 않음
 void	list_free(t_list *this);
 //리스트 해제, 내용물까지 해제
-void	list_free_all(t_list *this);
+void	list_free_all(t_list *this, void (*data_free)(void *));
 
 
 #endif
