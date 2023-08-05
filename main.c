@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 20:38:19 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 15:56:59 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
+			continue ;
+		if (syntax_check(&tokens))
 			continue ;
 		if (!heredoc_substitute(&tokens))
 			continue ;
