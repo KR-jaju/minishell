@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 17:58:57 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 20:38:19 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ void	minishell_exit(void)
 	exit(g_minishell.exit_code = 0);
 }
 
-void	leaks(void)
-{
-	system("leaks minishell");
-}
+// void	leaks(void)
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -102,9 +102,9 @@ int	main(int argc, char **argv, char **envp)
 	minishell_init(envp);
 	set_terminal_print_off();
 	all_signal();
-	atexit(leaks);
+	//atexit(leaks);
 	while (1)
-	{
+	{	
 		str = readline("minishell$ ");
 		if (str == (void *)0)
 			minishell_exit();

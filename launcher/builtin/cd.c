@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/03 16:52:23 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 10:42:41 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,6 @@ int	check_behind(t_process *this)
 	int			fd;
 
 	path = str_clone(this->argv[1]);
-	if (path[0] == '~' && (path[1] == '/' || \
-		path[1] == '\0'))
-	{
-		tmp = str_join("$HOME", path + 1);
-		free(path);
-		path = tmp;
-	}
 	tmp = unquote_env(path);
 	if (str_length(tmp) == 0)
 		fd = chdir(get_env("HOME"));

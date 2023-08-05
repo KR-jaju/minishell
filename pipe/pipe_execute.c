@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_execute.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 21:59:04 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/04 18:17:37 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 18:54:14 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
+#include <signal/signal.h>
 #include <shell/minishell.h>
 
 void	process_run(t_list *tokens)
@@ -29,6 +30,7 @@ void	process_run(t_list *tokens)
 		pid = execute_fork(&process_list);
 		wait_process(pid);
 	}
+	signal(SIGINT, main_sigint_handler);
 	list_free_all(tokens, token_free);
 	list_free_all(&process_list, process_free);
 }
