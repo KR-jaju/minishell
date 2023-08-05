@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:49:09 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 10:35:50 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 17:43:48 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	execute_no_fork(t_process *tmp, int builtin_idx)
 	stdout_copy = dup(1);
 	dup2(tmp->out_fd, 1);
 	g_minishell.exit_code = execute_builtins(builtin_idx, tmp);
+	//printf("execute_no_fork : %d\n", g_minishell.exit_code);
 	dup2(stdout_copy, 1);
 	close(stdout_copy);
 }
