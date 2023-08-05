@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:33:08 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 18:17:21 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:34:21 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//리다이렉션, 파이프라인과 같은 기호를 토큰으로 만듦
+//리다이렉션, 파이프라인과 같은 기호를 토큰으로 만듦, 오류 시 0
 static int	tokenize_symbol(char const **str, t_token *token)
 {
 	token->type = TK_INVALID;
@@ -34,12 +34,8 @@ static int	tokenize_symbol(char const **str, t_token *token)
 		return (token->type = TK_ORD, (*str)++, 1);
 	}
 	else if ((*str)[0] == '|')
-	{
-		if ((*str)[1] == '|')
-			return (0); //ERROR
 		return (token->type = TK_PIPE, (*str)++, 1);
-	}
-	return (0); //ERROR
+	return (printf("Invalid token\n"), 0); //ERROR
 }
 
 //기호가 아닌 나머지를 토큰으로 만듦

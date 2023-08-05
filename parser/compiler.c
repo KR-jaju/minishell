@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compiler.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:51:48 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/31 17:12:39 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:51:14 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,11 @@ static int	parse_process(t_process *process, t_list const *tokens,
 		else if (token->type == TK_STR)
 			add_arg(process, token->content);
 		else if (token->type == TK_ORD)
-		{
-			if (!set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, FALSE))
-				break ;
-		}
+			set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, FALSE);
 		else if (token->type == TK_ARD)
-		{
-			if (!set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, TRUE))
-				break ;
-		}
+			set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, TRUE);
 		else if (token->type == TK_IRD)
-		{
-			if (!set_input(process, ((t_token *)list_get(tokens, ++(*i)))->content))
-				break ;
-		}
+			set_input(process, ((t_token *)list_get(tokens, ++(*i)))->content);
 		token = list_get(tokens, ++(*i));
 	}
 	return (token != (void *)0);

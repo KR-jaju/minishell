@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 12:38:51 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 15:57:19 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:25:59 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,25 @@ static int	successive_token_check(t_list *tokens)
 	{
 		curr = list_get(tokens, i);
 		next = list_get(tokens, i + 1);
-		invalid = (curr->type != TK_STR && next->type != TK_STR)
-			|| (curr->type == TK_PIPE && next->type == TK_PIPE);
-		invalid = invalid || curr->type == TK_INVALID;
+		invalid = (curr->type != TK_STR && next->type != TK_STR);
+		invalid = invalid || (curr->type == TK_PIPE && next->type == TK_PIPE);
 		if (invalid)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static int	any_invalid(t_list *tokens)
+{
+	t_token	*curr;
+	int		i;
+
+	i = 0;
+	while (i < tokens->length)
+	{
+		curr = list_get(tokens, i);
+		if (curr->type == TK_INVALID)
 			return (1);
 		i++;
 	}
@@ -57,7 +72,8 @@ static int	successive_token_check(t_list *tokens)
 //토큰 리스트 단위 문법 체크
 int	syntax_check(t_list *tokens)
 {
-	int const	is_wrong = first_last_check(tokens)
+	int const	is_wrong = any_invalid(tokens)
+		|| first_last_check(tokens)
 		|| successive_token_check(tokens);
 
 	if (is_wrong)
