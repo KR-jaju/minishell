@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:52:02 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/04 17:06:55 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 14:33:02 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		unset_main(t_process *this);
 void	parent_process(int *prev_read_fd, int *next)
 {
 	signal(SIGINT, SIG_IGN);
-	close((*prev_read_fd));// 이전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
+	close((*prev_read_fd));// 전 파이프에서 받는 fd는 더 이상 쓸 일이 없다.
 	close(next[1]);// 다음 파이프에 출력하는 것도 더이상 필요 없다.
 	(*prev_read_fd) = next[0];
 }
