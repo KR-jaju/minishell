@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unquote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:47:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 15:52:26 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 17:47:57 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char	*int_to_str(int i)
 	while (digit >= 1)
 	{
 		new[str_length(new)] = (abs / digit) % 10 + '0';
+		//printf("new : %lld\n", (abs / digit) % 10);
 		digit /= 10;
 	}
 	return (new);

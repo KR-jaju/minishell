@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 10:48:44 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:02:17 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	heredoc_replace(t_list *tokens, char **end_list)
 			end_list[heredoc_idx] = token->content;
 			heredoc_filename(filename, heredoc_idx);
 			token->content = str_clone(filename);
+			if (heredoc_idx)
 			heredoc_idx++;
 		}
 		i++;
@@ -133,11 +134,15 @@ int	heredoc_substitute(t_list *tokens)
 		exit(0);
 	}
 	else
-	{
+	{	
 		signal(SIGINT, SIG_IGN);
 		waitpid(pid, &exit_code, 0);
 		if (WIFEXITED(exit_code))
+		{
 			exit_code = WEXITSTATUS(exit_code);
+			if (exit_code != 0)
+				g_minishell.exit_code = exit_code;
+		}
 		signal(SIGINT, main_sigint_handler);
 	}
 	return (exit_code == 0);

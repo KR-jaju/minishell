@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 10:35:49 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:05:19 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <libft/libft.h>
 #include <stdlib.h>
 #include <parser/tokenizer.h>
+#include <parser/parser.h>
 
 #define STD_IN 0
 #define STD_OUT 1
@@ -61,8 +62,8 @@ void	process_free(void *this)
 //프로세스의 이름 설정
 void	set_name(t_process *process, char const *name)
 {
-	process->name = str_clone(name);
-	add_arg(process, process->name);
+	process->name = unquote_env(name);
+	add_arg(process, name);
 }
 
 //프로세스의 옵션 추가
@@ -82,7 +83,7 @@ void	add_arg(t_process *process, char const *arg)
 		process->argv = tmp;
 	}
 	process->argc++;
-	process->argv[length] = str_clone(arg);
+	process->argv[length] = unquote_env(arg);
 }
 
 //프로세스의 출력 파일을 설정, 실패 시 0, 성공 시 1 리턴
