@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/03 17:11:48 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 10:48:44 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	sigterm_handler_heredoc(int sin);
 //heredoc에 사용할 tmp파일의 이름
 static void	heredoc_filename(char *dst, int idx)
 {
-	copy("_NN.tmp", dst, 8);
+	copy("_00.tmp", dst, 8);
 	dst[1] = (idx / 10) + '0';
 	dst[2] = (idx % 10) + '0';
 }
@@ -48,6 +48,10 @@ static void	heredoc_prompt(char const *filename, char const *end)
 		str = readline("> ");
 		if (str == (void *)0)
 		{
+			//free(str);
+			//printf("\r");
+			//printf("DENBUG");
+			//exit(g_minishell.exit_code = 0);
 			sigterm_handler_heredoc(1);
 			break ;
 		}
