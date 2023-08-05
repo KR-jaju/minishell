@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:49:09 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 17:43:48 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:50:12 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	execute_no_fork(t_process *tmp, int builtin_idx)
 {
 	int	stdout_copy;
 
+	if (tmp->bad_process)
+		return ;
 	stdout_copy = dup(1);
 	dup2(tmp->out_fd, 1);
 	g_minishell.exit_code = execute_builtins(builtin_idx, tmp);
@@ -63,11 +65,16 @@ int	execute_fork(t_list *p_test)
 			pipe(next); //파이프 생성
 		else
 			pipe_init(next, dup(0), dup(1));
-		pid = fork(); // 자식 프로세스 생성
-		if (pid == 0) // 자식 프로세스
-			child_process(tmp, &prev_read_fd, next);
-		else if (pid > 0)
-			parent_process(&prev_read_fd, next);
+		if (!tmp->bad_process)
+		{
+			
+			printf("p_test->length %d\n",p_test->length);
+			printf("tmp->bad_process %d\n",tmp->bad_process);
+			pid = fork(); // 자식 프로세스 생성
+			if (pid == 0) // 자식 프로세스
+				child_process(tmp, &prev_read_fd, next);
+		}
+		parent_process(&prev_read_fd, next);
 		i++;
 	}
 	close(prev_read_fd); // 모든게 끝나고 남은 건 이전 파이프의 읽는 fd

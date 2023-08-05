@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 18:11:15 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 18:55:00 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	check_behind(t_process *this)
 		return (SUCCES_EXIT);
 	else
 	{
-		if (write(2, "basha: ", 6) == -1)
+		if (write(2, "bash: ", 6) == -1)
 			return (perror("write"), ERROR_EXIT);
 		if (print_argv(this->argv) == 1)
 			return (ERROR_EXIT);
@@ -95,7 +95,7 @@ int	cd_main(t_process *this)
 		if (chdir(path_envp) == -1)
 		{
 			//perror결과값과 strerror결과값이 같음
-			if ((write(2, "basha: ", 6) == -1))
+			if ((write(2, "bash: ", 6) == -1))
 				return (perror("write"), ERROR_EXIT);
 			if (print_argv(this->argv) == 1)
 				return (ERROR_EXIT);
