@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 18:32:21 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 18:13:10 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <libft/libft.h>
 #include <stdlib.h>
 #include <parser/tokenizer.h>
+#include <shell/minishell.h>
 
 #define STD_IN 0
 #define STD_OUT 1
@@ -84,6 +85,7 @@ void	add_arg(t_process *process, char const *arg)
 	process->argc++;
 	process->argv[length] = str_clone(arg);
 }
+#include <stdio.h>
 
 //프로세스의 출력 파일을 설정, 실패 시 0, 성공 시 1 리턴
 int	set_output(t_process *process, char *filename, int append)
@@ -92,6 +94,11 @@ int	set_output(t_process *process, char *filename, int append)
 		if (close(process->out_fd))
 			return (process->bad_process = 1, 0);
 	process->out_fd = open(filename, O_WRONLY | O_CREAT, 0644);
+	// if (process->out_fd == -1)
+	// {
+	// 	printf("error:\n");
+	// 	exit(1);
+	// }
 	process->append = append;
 	if (process->out_fd == -1)
 		return (process->bad_process = 1, 0);
@@ -104,8 +111,18 @@ int	set_input(t_process *process, char *filename)
 	if (process->in_fd != STD_IN)
 		if (close(process->in_fd))
 			return (process->bad_process = 1, 0);
-	process->in_fd = open(filename, O_RDONLY | O_CREAT, 0644);
+	//process->in_fd = open(filename, O_RDONLY | O_CREAT, 0644);
+	process->in_fd = open(filename, O_RDONLY);
+	// if (process->in_fd == -1)
+	// {
+	// 	printf("error:\n");
+	// 	exit(1);
+	// }
 	if (process->in_fd == -1)
+	{
+		printf("bash: ccc: Permission denied\n");
+		g_minishell.exit_code = 1;
 		return (process->bad_process = 1, 0);
+	}
 	return (1);
 }
