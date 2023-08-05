@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:49:09 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/04 18:19:31 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 21:21:14 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	execute_no_fork(t_process *tmp, int builtin_idx)
 	close(stdout_copy);
 }
 
-int	execute_fork(t_list const *p_test)
+int	execute_fork(t_list *p_test)
 {
 	int			i;
 	int			pid;

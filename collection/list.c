@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:59:14 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 18:14:55 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/04 18:28:31 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	list_free_all(t_list *this, void (*data_free)(void *))
 	i = 0;
 	while (i < this->length)
 	{
-		if(data_free != (void *)0)
+		if (data_free != (void *)0)
 			data_free(this->data[i]);
 		free(this->data[i]);
 		i++;
