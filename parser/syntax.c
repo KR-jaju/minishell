@@ -6,11 +6,12 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 12:38:51 by jaju              #+#    #+#             */
-/*   Updated: 2023/07/29 22:10:11 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/05 15:57:19 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "syntax.h"
+#include <stdio.h>
 
 //맨 앞과 맨 뒤에 있는 토큰이 그 자리에 있어도 되는가?
 static int	first_last_check(t_list *tokens)
@@ -56,8 +57,10 @@ static int	successive_token_check(t_list *tokens)
 //토큰 리스트 단위 문법 체크
 int	syntax_check(t_list *tokens)
 {
-	return (
-		first_last_check(tokens)
-		|| successive_token_check(tokens)
-	);
+	int const	is_wrong = first_last_check(tokens)
+		|| successive_token_check(tokens);
+
+	if (is_wrong)
+		printf("minishell: invalid syntax\n");
+	return (is_wrong);
 }
