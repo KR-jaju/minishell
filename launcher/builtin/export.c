@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 01:39:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 21:03:13 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 17:47:15 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	export_set(t_process *this)
 	i = 1;
 	while (i < this->argc)
 	{
-		parsed = unquote_env(this->argv[i]);
+		parsed = str_clone(this->argv[i]);
 		if (parse_arg(parsed, &name, &value))
 			set_env(name, value);
 		else
