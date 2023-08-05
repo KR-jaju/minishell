@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/04 20:38:19 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 18:15:28 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void	minishell_exit(void)
 // 	system("leaks minishell");
 // }
 
+#include <parser/parser.h>
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
@@ -105,6 +107,7 @@ int	main(int argc, char **argv, char **envp)
 	//atexit(leaks);
 	while (1)
 	{	
+		//printf("main heredoc exit_cdoe : %d\n", g_minishell.exit_code);
 		str = readline("minishell$ ");
 		if (str == (void *)0)
 			minishell_exit();
@@ -113,8 +116,12 @@ int	main(int argc, char **argv, char **envp)
 		add_history(str);
 		if (!tokenize_command(str, &tokens))
 			continue ;
+		if (syntax_check(&tokens))
+			continue ;
+		//printf("sysntax_check heredoc exit_cdoe : %d\n", g_minishell.exit_code);
 		if (!heredoc_substitute(&tokens))
 			continue ;
+		//printf("heredoc_substitute exit_cdoe : %d\n", g_minishell.exit_code);
 		//printf("awed\n");
 		process_run(&tokens);
 		heredoc_unlink_tmp();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/03 16:52:23 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 18:11:15 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,27 +59,21 @@ static int	print_argv(char	**argv)
 int	check_behind(t_process *this)
 {
 	char		*path;
-	char		*tmp;
 	int			fd;
 
-	path = str_clone(this->argv[1]);
-	if (path[0] == '~' && (path[1] == '/' || \
-		path[1] == '\0'))
-	{
-		tmp = str_join("$HOME", path + 1);
-		free(path);
-		path = tmp;
-	}
-	tmp = unquote_env(path);
-	if (str_length(tmp) == 0)
+	if (this->argc == 1)
 		fd = chdir(get_env("HOME"));
 	else
-		fd = chdir(tmp);
+	{
+		path = str_clone(this->argv[1]);
+		fd = chdir(path);
+		free(path);
+	}
 	if (fd == 0)
 		return (SUCCES_EXIT);
 	else
 	{
-		if (write(2, "bash: ", 6) == -1)
+		if (write(2, "basha: ", 6) == -1)
 			return (perror("write"), ERROR_EXIT);
 		if (print_argv(this->argv) == 1)
 			return (ERROR_EXIT);
@@ -101,7 +95,7 @@ int	cd_main(t_process *this)
 		if (chdir(path_envp) == -1)
 		{
 			//perror결과값과 strerror결과값이 같음
-			if ((write(2, "bash: ", 6) == -1))
+			if ((write(2, "basha: ", 6) == -1))
 				return (perror("write"), ERROR_EXIT);
 			if (print_argv(this->argv) == 1)
 				return (ERROR_EXIT);

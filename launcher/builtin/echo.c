@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:08:14 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/01 21:37:39 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 17:46:21 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	echo_main(t_process *this)
 	n_flag = (i != 1);
 	while (this->argv[i] != (void *)0)
 	{
-		tmp = unquote_env(this->argv[i]);
+		tmp = str_clone(this->argv[i]);
 		fd = write(1, tmp, str_length(tmp));
 		if (fd == -1)
 			return (perror("write"), ERROR_EXIT);
