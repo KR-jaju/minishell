@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 18:55:00 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/06 17:48:13 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <shell/minishell.h>
+#include <limits.h>
 
 //에러가 나는 인수 출력
 static int	out_argv(char *argv)
@@ -56,6 +57,71 @@ static int	print_argv(char	**argv)
 	return (0);
 }
 
+//cd를 실행시킨후 환경변수 PWD 초기화
+void	cd_execut_change_pwd(void)
+{
+	char			pwd[PATH_MAX];
+	t_list*const	env_list = &g_minishell.env_list;
+	t_envp			*env;
+	int				i;
+	int				j;
+
+	i = 0;
+	while (i < env_list->length)
+	{
+		env = list_get(env_list, i++);
+		if (str_equals(env->name, "PWD"))
+		{
+			if (getcwd(pwd, PATH_MAX) != (void *)0)
+			{
+				char*const tmp = allocate(str_length(pwd));
+				j = 0;
+				while (pwd[j])
+				{
+					tmp[j] = pwd[j];
+					j++;
+				}
+				tmp[j] = '\0';
+				free(env->value);
+				env->value = tmp;
+			}
+		}
+	}
+}
+
+//cd를 하기 전에 PWD값을 OLDPWD에 저장
+void	oldpwd_save(void)
+{
+	char			pwd[PATH_MAX];
+	t_list*const	env_list = &g_minishell.env_list;
+	t_envp			*env;
+	int				i;
+	int				j;
+
+	i = 0;
+	while (i < env_list->length)
+	{
+		env = list_get(env_list, i++);
+		if (str_equals(env->name, "OLDPWD"))
+		{
+			if (getcwd(pwd, PATH_MAX) != (void *)0)
+			{
+				char*const tmp = allocate(str_length(pwd));
+				j = 0;
+				while (pwd[j])
+				{
+					tmp[j] = pwd[j];
+					j++;
+				}
+				tmp[j] = '\0';
+				free(env->value);
+				env->value = tmp;
+			}
+		}
+	}
+}
+
+
 int	check_behind(t_process *this)
 {
 	char		*path;
@@ -70,7 +136,10 @@ int	check_behind(t_process *this)
 		free(path);
 	}
 	if (fd == 0)
+	{
+		cd_execut_change_pwd();
 		return (SUCCES_EXIT);
+	}
 	else
 	{
 		if (write(2, "bash: ", 6) == -1)
@@ -87,6 +156,9 @@ int	cd_main(t_process *this)
 {
 	char const	*path_envp;
 
+	//cd를 하기 전에 OLDPWD에 저장 
+	//실패해도 성공해도 저장이 됨.
+	oldpwd_save();
 	if (this->argc == 1)
 	{
 		path_envp = get_env("HOME");
@@ -100,6 +172,7 @@ int	cd_main(t_process *this)
 			if (print_argv(this->argv) == 1)
 				return (ERROR_EXIT);
 		}
+		cd_execut_change_pwd();
 	}
 	else if (this->argc >= 2)
 		return (check_behind(this));
