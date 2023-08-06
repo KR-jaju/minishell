@@ -6,14 +6,13 @@
 /*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:49:09 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/06 23:38:09 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:37:35 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
 #include <shell/minishell.h>
 #include <parser/compiler.h>
-#include <launcher/error.h>
 #include <libft/libft.h>
 #include <signal/signal.h>
 #include <readline/readline.h>

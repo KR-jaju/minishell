@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/06 23:40:01 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:37:30 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 #include <shell/minishell.h>
-#include <launcher/error.h>
 
 //signal 함수
 void	main_sigint_handler(int sign);
