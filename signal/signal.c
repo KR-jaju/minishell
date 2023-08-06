@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 23:06:31 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 17:38:16 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/06 23:22:03 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	sigterm_handler_heredoc(int sin)
 {
 	(void) sin;
 	
-	write(2, "\033[1A", 4);
-	write(2, "\033[2C", 4);
+	//write(2, "\033[1A", 4);
+	//write(2, "\033[2C", 4);
 	//printf("\r");
 	// rl_on_new_line();
 	// rl_replace_line("", 0);

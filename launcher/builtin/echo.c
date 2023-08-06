@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:08:14 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 17:46:21 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:20:41 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,34 +42,25 @@ int	echo_main(t_process *this)
 {
 	int		n_flag;
 	int		i;
-	char	*tmp;
-	int		fd;
 
+	n_flag = 0;
 	i = 1;
 	if (this->argc >= 2)
-		while (is_n_flag(this->argv[i]))
-			i++;
-	n_flag = (i != 1);
-	while (this->argv[i] != (void *)0)
 	{
-		tmp = str_clone(this->argv[i]);
-		fd = write(1, tmp, str_length(tmp));
-		if (fd == -1)
-			return (perror("write"), ERROR_EXIT);
-		free(tmp);
-		if (i != this->argc - 1)
+		while (is_n_flag(this->argv[i]))
 		{
-			fd = write(1, " ", 1);
-			if (fd == -1)
-				return (perror("write"), ERROR_EXIT);
+			n_flag = 1;
+			i++;
 		}
+	}
+	while (i < this->argc)
+	{
+		if (i != 0)
+			printf(" ");
+		printf("%s", this->argv[i]);
 		i++;
 	}
 	if (!n_flag)
-	{
-		fd = write(1, "\n", 1);
-		if (fd == -1)
-			return (perror("write"), ERROR_EXIT);
-	}
+		printf("\n");
 	return (SUCCES_EXIT);
 }

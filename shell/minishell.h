@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:40:16 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 17:48:04 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/06 23:44:05 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,12 @@
 
 # include <collection/list.h>
 
-
-
 //환경변수의 이름과 내용을 저장하는 구조체
-typedef struct s_envp
+typedef struct s_env
 {
 	char	*name;
 	char	*value;
-}t_envp;
+}t_env;
 
 //미니쉘이 실행되는 동안 지니고 있어야 할 정보를 담는 구조체
 typedef struct s_minishell

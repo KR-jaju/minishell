@@ -6,7 +6,7 @@
 /*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 18:17:08 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/05 18:32:50 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,16 @@ int	set_output(t_process *process, char *filename, int append)
 		if (close(process->out_fd))
 			return (process->bad_process = 1, 0);
 	process->out_fd = open(filename, O_WRONLY | O_CREAT, 0644);
-	// if (process->out_fd == -1)
-	// {
-	// 	printf("error:\n");
-	// 	exit(1);
-	// }
 	process->append = append;
 	if (process->out_fd == -1)
+	{
+		write(2, "bash: ", 6);
+		write(2, filename, str_length(filename));
+		write(2, ": ", 2);
+		perror("");
+		g_minishell.exit_code = 1;
 		return (process->bad_process = 1, 0);
+	}
 	return (1);
 }
 
@@ -112,16 +114,13 @@ int	set_input(t_process *process, char *filename)
 	if (process->in_fd != STD_IN)
 		if (close(process->in_fd))
 			return (process->bad_process = 1, 0);
-	//process->in_fd = open(filename, O_RDONLY | O_CREAT, 0644);
 	process->in_fd = open(filename, O_RDONLY);
-	// if (process->in_fd == -1)
-	// {
-	// 	printf("error:\n");
-	// 	exit(1);
-	// }
 	if (process->in_fd == -1)
 	{
-		printf("bash: ccc: Permission denied\n");
+		write(2, "bash: ", 6);
+		write(2, filename, str_length(filename));
+		write(2, ": ", 2);
+		perror("");
 		g_minishell.exit_code = 1;
 		return (process->bad_process = 1, 0);
 	}

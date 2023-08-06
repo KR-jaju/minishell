@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 03:49:42 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 03:37:06 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/06 23:45:11 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 #include <stdlib.h>
 
 //envp구조체를 char *로 만들어 줌
-char	*env_to_str(t_envp *env);
+char	*env_to_str(t_env *env);
+void	env_init(t_env *this, char *name, char *value);
+void	env_free(void *this);
 
 //문자열에 대응하는 환경변수의 값을 리턴
 char const	*get_env(char const *str)
 {
 	t_list*const	env_list = &g_minishell.env_list;
-	t_envp			*env;
+	t_env			*env;
 	int				i;
 
 	i = 0;
@@ -40,7 +42,7 @@ void	set_env(char const *name, char const *value)
 {
 	t_list*const	env_list = &g_minishell.env_list;
 	int				i;
-	t_envp			*env;
+	t_env			*env;
 
 	i = 0;
 	while (i < env_list->length)
@@ -54,16 +56,15 @@ void	set_env(char const *name, char const *value)
 				return (free(env->value), env->value = str_clone(value), (void)0);
 		}
 	}
-	env = allocate(sizeof(t_envp));
+	env = allocate(sizeof(t_env));
+	env_init(env, str_clone(name), str_clone(value));
 	list_add(env_list, env);
-	env->name = str_clone(name);
-	env->value = str_clone(value);
 }
 
 void	remove_env(char const *name)
 {
 	t_list*const	env_list = &g_minishell.env_list;
-	t_envp			*env;
+	t_env			*env;
 	int				i;
 
 	i = 0;
@@ -74,8 +75,7 @@ void	remove_env(char const *name)
 			break ;
 		i++;
 	}
-	free(env->name);
-	free(env->value);
+	env_free(env);
 	free(env);
 	list_remove(env_list, i);
 }
@@ -84,7 +84,7 @@ char	**get_envp(void)
 {
 	t_list*const	env_list = &g_minishell.env_list;
 	char**const		envp = allocate((env_list->length + 1) * sizeof(char *));
-	t_envp			*env;
+	t_env			*env;
 	int				i;
 	int				j;
 

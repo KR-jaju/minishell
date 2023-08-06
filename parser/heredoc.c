@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:44:23 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 18:02:17 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/06 23:40:01 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,6 @@ static void	heredoc_prompt(char const *filename, char const *end)
 		str = readline("> ");
 		if (str == (void *)0)
 		{
-			//free(str);
-			//printf("\r");
-			//printf("DENBUG");
-			//exit(g_minishell.exit_code = 0);
 			sigterm_handler_heredoc(1);
 			break ;
 		}
@@ -80,7 +76,8 @@ void	heredoc_unlink_tmp(void)
 	}
 }
 
-void	heredoc_replace(t_list *tokens, char **end_list)
+// "<< LIMIT STRING"을 "< heredoc_tmpfile"로 바꿈
+static void	heredoc_replace(t_list *tokens, t_list *limit_strings)
 {
 	t_token	*token;
 	int		i;
@@ -96,54 +93,52 @@ void	heredoc_replace(t_list *tokens, char **end_list)
 		{
 			token->type = TK_IRD;
 			token = list_get(tokens, ++i);
-			end_list[heredoc_idx] = token->content;
+			list_add(limit_strings, token->content);
 			heredoc_filename(filename, heredoc_idx);
 			token->content = str_clone(filename);
-			if (heredoc_idx)
 			heredoc_idx++;
 		}
 		i++;
 	}
+	if (heredoc_idx > 16)
+		panic("TOO MANY HEREDOC");
 }
 
-//<<를 <로 치환, delimiter를 tmp파일로 치환
+//<<를 <로 치환, delimiter를 tmp파일로 치환, heredoc 프롬프트 생성
 int	heredoc_substitute(t_list *tokens)
 {
 	int		heredoc_idx;
 	pid_t	pid;
 	int		exit_code;
-	char	*end_list[17];
+	t_list	limit_strings;
 	char	filename[20];
-	int		i;
 
-	i = -1;
-	while (++i < 17)
-		end_list[i] = (void *)0;
-	heredoc_replace(tokens, end_list);
+	list_init(&limit_strings);
+	heredoc_replace(tokens, &limit_strings);
 	pid = fork();
+	if (pid == -1)
+		panic("Fork error!");
 	if (pid == 0)
 	{
 		signal(SIGINT, main_sigint_handler_heredoc);
 		heredoc_idx = 0;
-		while (end_list[heredoc_idx] != (void *)0)
+		while (list_get(&limit_strings, heredoc_idx) != (void *)0)
 		{
 			heredoc_filename(filename, heredoc_idx);
-			heredoc_prompt(filename, end_list[heredoc_idx]);
+			heredoc_prompt(filename, list_get(&limit_strings, heredoc_idx));
 			heredoc_idx++;
 		}
 		exit(0);
 	}
-	else
-	{	
-		signal(SIGINT, SIG_IGN);
-		waitpid(pid, &exit_code, 0);
-		if (WIFEXITED(exit_code))
-		{
-			exit_code = WEXITSTATUS(exit_code);
-			if (exit_code != 0)
-				g_minishell.exit_code = exit_code;
-		}
-		signal(SIGINT, main_sigint_handler);
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, &exit_code, 0);
+	if (WIFEXITED(exit_code))
+	{
+		exit_code = WEXITSTATUS(exit_code);
+		if (exit_code != 0)
+			g_minishell.exit_code = exit_code;
 	}
+	signal(SIGINT, main_sigint_handler);
+	list_free_all(&limit_strings, (void *)0);
 	return (exit_code == 0);
 }
