@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:51:48 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/07 15:08:39 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 20:33:07 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ static int	parse_process(t_process *process, t_list const *tokens,
 		else if (token->type == TK_STR)
 			add_arg(process, token->content);
 		else if (token->type == TK_ORD)
-			set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, FALSE);
+			set_output(process,
+				((t_token *)list_get(tokens, ++(*i)))->content, FALSE);
 		else if (token->type == TK_ARD)
-			set_output(process, ((t_token *)list_get(tokens, ++(*i)))->content, TRUE);
+			set_output(process,
+				((t_token *)list_get(tokens, ++(*i)))->content, TRUE);
 		else if (token->type == TK_IRD)
 			set_input(process, ((t_token *)list_get(tokens, ++(*i)))->content);
 		token = list_get(tokens, ++(*i));
