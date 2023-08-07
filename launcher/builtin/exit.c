@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 21:54:31 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 21:14:07 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/07 00:30:38 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,30 +60,14 @@ int	exit_main(t_process *this)
 
 	if (this->argc == 1)
 		exit(0);
-	else if (this->argc == 2)
+	printf("exit\n");
+	if (!parse_exit_code(this->argv[1], &code))
 	{
-		//$가 오는데 뒤에 환경변수를 실행할 수 없는 거면 exit화면에 출력하고 정상 종료
-		//$가 오는데 뒤에 환경변수를 실행시킬 수 있으면 결과값을 보여주고 numeric argument required 후 255출력
-
-		if (!parse_exit_code(this->argv[1], &code))
-		{
-			printf("exit\n");
-			printf("bash: exit: %s: numeric argument required\n", unquote_env(this->argv[1]));
-			exit(255); //numeric argument required
-		}
-		// else
-		// {
-
-		// }
-		printf("exit\n");
-		// if (this->argv[1][0] == '$')
-		// {
-		// 	exit(0);
-		// }
-		//printf("code : %d\n", code);
-		exit(code);
+		printf("bash: exit: %s: numeric argument required\n", unquote_env(this->argv[1]));
+		exit(255); //numeric argument required
 	}
-	//printf("exit\n");
+	else if (this->argc == 2)
+		exit(code);
 	printf("exit: too many arguments\n");
-	exit(1); // too many argument
+	return (1);
 }

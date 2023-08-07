@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   env_util.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 04:00:45 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 03:37:17 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/06 23:50:08 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <str/str.h>
 #include <libft/libft.h>
+#include <stdlib.h>
 
-char	*env_to_str(t_envp *env)
+char	*env_to_str(t_env *env)
 {
 	int const	name_len = str_length(env->name);
 	int const	value_len = str_length(env->value);
@@ -28,4 +29,16 @@ char	*env_to_str(t_envp *env)
 	ptr += 1;
 	copy(env->value, ptr, value_len);
 	return (new);
+}
+
+void	env_init(t_env *this, char *name, char *value)
+{
+	this->name = name;
+	this->value = value;
+}
+
+void	env_free(void *this)
+{
+	free(((t_env *)this)->name);
+	free(((t_env *)this)->value);
 }

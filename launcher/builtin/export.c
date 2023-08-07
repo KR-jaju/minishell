@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 01:39:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 17:47:15 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:31:30 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	parse_arg(char const *str, char **name, char **value)
 static int	export_view()
 {
 	t_list*const	env_list = &g_minishell.env_list;
-	t_envp			*env;
+	t_env			*env;
 	int				i;
 
 	i = 0;
@@ -79,7 +79,6 @@ static int	export_view()
 
 static int	export_set(t_process *this)
 {
-	char	*parsed;
 	char	*name;
 	char	*value;
 	int		exit_code;
@@ -89,15 +88,14 @@ static int	export_set(t_process *this)
 	i = 1;
 	while (i < this->argc)
 	{
-		parsed = str_clone(this->argv[i]);
-		if (parse_arg(parsed, &name, &value))
+		if (parse_arg(this->argv[i], &name, &value))
 			set_env(name, value);
 		else
 		{
-			printf("bash: export: `%s`: not a valid identifier\n", parsed);
+			printf("bash: export: `%s`: not a valid identifier\n",
+				this->argv[i]);
 			exit_code = 1;
 		}
-		free(parsed);
 		free(name);
 		free(value);
 		i++;
@@ -105,7 +103,7 @@ static int	export_set(t_process *this)
 	return (exit_code);
 }
 
-int	 export_main(t_process *this)
+int	export_main(t_process *this)
 {
 	if (this->argc == 1)
 		return (export_view());

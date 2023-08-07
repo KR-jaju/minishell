@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 16:41:01 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/05 18:15:28 by jaeyojun         ###   ########seoul.kr  */
+/*   Updated: 2023/08/07 00:37:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 #include <parser/compiler.h>
 #include <signal/signal.h>
 #include <termios.h>
-#include <launcher/error.h>
 
 void	visualize(t_list tokens)
 {

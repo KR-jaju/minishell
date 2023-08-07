@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:49:09 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 18:41:17 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:37:35 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe.h"
 #include <shell/minishell.h>
 #include <parser/compiler.h>
-#include <launcher/error.h>
 #include <libft/libft.h>
 #include <signal/signal.h>
 #include <readline/readline.h>
@@ -97,7 +96,7 @@ void	wait_process(int pid)
 //builtin인 검사
 int	check_builtin(char *name, int *idx)
 {
-	char**const	builtins = (char *[]){
+	static char	*builtins[] = (char *[]){
 		"echo",
 		"cd",
 		"pwd",

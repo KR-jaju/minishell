@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 13:09:29 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/02 14:13:12 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:21:10 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int	env_main(t_process *this)
 {
 	t_list*const	env_list = &g_minishell.env_list;
-	t_envp			*env;
+	t_env			*env;
 	int				i;
 
 	(void)this;

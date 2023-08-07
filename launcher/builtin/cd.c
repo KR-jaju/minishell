@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaju <jaju@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/05 18:11:15 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/07 00:14:07 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,66 +17,75 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <shell/minishell.h>
+#include <limits.h>
 
-//에러가 나는 인수 출력
-static int	out_argv(char *argv)
+//cd를 실행시킨후 환경변수 PWD 초기화
+void	update_pwd(void)
 {
-	int	i;
+	char	pwd[PATH_MAX];
 
-	i = 0;
-	while (argv[i])
-	{
-		if (write(2, &argv[i], 1) == -1)
-		{
-			perror("write");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
+	if (getcwd(pwd, PATH_MAX) != (void *)0)
+		set_env("PWD", pwd);
 }
 
-//입력값 출력하고 ": " 출력하고 perror출력
-static int	print_argv(char	**argv)
+
+void	update_oldpwd(void)
 {
-	int	i;
+	char	pwd[PATH_MAX];
+
+	if (getcwd(pwd, PATH_MAX) != (void *)0)
+		set_env("OLDPWD", pwd);
+}
+
+//cd를 하기 전에 PWD값을 OLDPWD에 저장
+/*
+void	oldpwd_save(void)
+{
+	char			pwd[PATH_MAX];
+	t_list*const	env_list = &g_minishell.env_list;
+	t_env			*env;
+	int				i;
+	int				j;
 
 	i = 0;
-	while (argv[i])
+	while (i < env_list->length)
 	{
-		out_argv(argv[i]);
-		if (write(2, ": ", 2) == -1)
+		env = list_get(env_list, i++);
+		if (str_equals(env->name, "OLDPWD"))
 		{
-			perror("write");
-			return (1);
+			if (getcwd(pwd, PATH_MAX) != (void *)0)
+			{
+				char*const tmp = allocate(str_length(pwd));
+				j = 0;
+				while (pwd[j])
+				{
+					tmp[j] = pwd[j];
+					j++;
+				}
+				tmp[j] = '\0';
+				free(env->value);
+				env->value = tmp;
+			}
 		}
-		i++;
 	}
-	perror("");
-	return (0);
 }
+*/
 
 int	check_behind(t_process *this)
 {
-	char		*path;
+	//char		*path;
 	int			fd;
 
-	if (this->argc == 1)
-		fd = chdir(get_env("HOME"));
-	else
-	{
-		path = str_clone(this->argv[1]);
-		fd = chdir(path);
-		free(path);
-	}
+	fd = chdir(this->argv[1]);
 	if (fd == 0)
+	{
+		update_pwd();
 		return (SUCCES_EXIT);
+	}
 	else
 	{
-		if (write(2, "basha: ", 6) == -1)
-			return (perror("write"), ERROR_EXIT);
-		if (print_argv(this->argv) == 1)
-			return (ERROR_EXIT);
+		write(2, "minishell: ", 12);
+		perror(this->argv[1]);
 		return (ERROR_EXIT);
 	}
 }
@@ -87,21 +96,18 @@ int	cd_main(t_process *this)
 {
 	char const	*path_envp;
 
+	//cd를 하기 전에 OLDPWD에 저장 
+	//실패해도 성공해도 저장이 됨.
+	update_oldpwd();
 	if (this->argc == 1)
-	{
 		path_envp = get_env("HOME");
-		if (!path_envp)
-			return (ERROR_EXIT);
-		if (chdir(path_envp) == -1)
-		{
-			//perror결과값과 strerror결과값이 같음
-			if ((write(2, "basha: ", 6) == -1))
-				return (perror("write"), ERROR_EXIT);
-			if (print_argv(this->argv) == 1)
-				return (ERROR_EXIT);
-		}
+	else
+		path_envp = this->argv[1];
+	if (chdir(path_envp) == -1) // != 0 인지, == -1 인지 명확하게
+	{
+		write(2, "bash: ", 6);
+		perror(this->argv[1]);
 	}
-	else if (this->argc >= 2)
-		return (check_behind(this));
+	update_pwd();
 	return (SUCCES_EXIT);
 }
