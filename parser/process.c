@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 16:35:44 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/08 01:52:42 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/08 10:57:26 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,7 @@ int	set_output(t_process *process, char *filename, int append)
 	process->append = append;
 	if (process->out_fd == -1)
 	{
-		write(2, "bash: ", 6);
-		write(2, filename, str_length(filename));
-		write(2, ": ", 2);
-		perror("");
+		basherr(filename);
 		g_minishell.exit_code = 1;
 		return (process->bad_process = 1, 0);
 	}

@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 16:52:02 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/08 02:41:30 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/08 13:52:06 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ void	exit_code_handler(int status, int *flag_printed, int pid, int child)
 		{
 			if (signo == SIGINT)
 				printf("^C\n");
-			else if (signo == SIGQUIT)
-				printf("^\\Quit: 3\n");
 			(*flag_printed) = 1;
 		}
 		if (child == pid)

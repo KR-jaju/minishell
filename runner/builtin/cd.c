@@ -6,7 +6,7 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 22:42:10 by jaeyojun          #+#    #+#             */
-/*   Updated: 2023/08/07 20:37:50 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/08 10:58:27 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ int	check_behind(t_process *this)
 	}
 	else
 	{
-		write(2, "minishell: ", 12);
-		perror(this->argv[1]);
+		basherr(this->argv[1]);
 		return (ERROR_EXIT);
 	}
 }
@@ -66,8 +65,7 @@ int	cd_main(t_process *this)
 		path_envp = this->argv[1];
 	if (chdir(path_envp) == -1)
 	{
-		write(2, "bash: ", 6);
-		perror(this->argv[1]);
+		basherr(this->argv[1]);
 	}
 	update_pwd();
 	return (SUCCES_EXIT);

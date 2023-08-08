@@ -6,13 +6,14 @@
 /*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 12:38:51 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/08 02:33:58 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/08 14:48:25 by jaju             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "syntax.h"
 #include <stdio.h>
 #include <libft/libft.h>
+#include <shell/minishell.h>
 
 //맨 앞과 맨 뒤에 있는 토큰이 그 자리에 있어도 되는가?
 static int	first_last_check(t_list *tokens)
@@ -72,6 +73,9 @@ int	syntax_check(t_list *tokens)
 		|| successive_token_check(tokens);
 
 	if (is_wrong)
-		printerr("bash: invalid syntax\n");
+	{
+		printerr("bash: syntax error: invalid syntax\n");
+		g_minishell.exit_code = 258;
+	}
 	return (is_wrong);
 }
