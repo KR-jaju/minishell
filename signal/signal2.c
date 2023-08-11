@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaju <jaju@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jaeyojun <jaeyojun@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 13:42:56 by jaju              #+#    #+#             */
-/*   Updated: 2023/08/08 15:11:46 by jaju             ###   ########.fr       */
+/*   Updated: 2023/08/11 16:26:40 by jaeyojun         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,11 @@ void	sig_quit(int code)
 	char	*nbr;
 
 	nbr = ft_itoa(code);
+	if (nbr == (void *)0)
+		exit(1);
 	write(2, "^\\Quit: ", 8);
 	write(2, nbr, str_length(nbr));
 	write(2, "\n", 1);
-	if (nbr)
-	{
-		free(nbr);
-		nbr = NULL;
-	}
+	free(nbr);
+	nbr = NULL;
 }
